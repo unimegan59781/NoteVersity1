@@ -26,7 +26,7 @@ public class DbModels extends SQLiteOpenHelper {
     // NOTES TABLE
     public static final String N_ID = "noteID";
     public static final String NAME = "noteName";
-    public static final String NOTE = "notePNG";
+    public static final String NOTE = "noteIMG";
 
 
     // TABLE CREATION
