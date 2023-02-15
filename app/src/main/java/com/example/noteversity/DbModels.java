@@ -10,7 +10,7 @@ import java.util.List;
 public class DbModels extends SQLiteOpenHelper {
     static final int DB_VERSION = 1; //db version control
 
-    static List<String> tableList = Arrays.asList(new String[]{"USERS", "FOLDERS", "NOTES", "UFLINK"}); //list of table names -- KEEP ORDER FOR CROSS REFERNCING
+    static List<String> tableList = Arrays.asList("USERS", "FOLDERS", "NOTES", "UFLINK"); //list of table names -- KEEP ORDER FOR CROSS REFERNCING
 
     // USERS TABLE
     public static final String U_ID = "userID";
