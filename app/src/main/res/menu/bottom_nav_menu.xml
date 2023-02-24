@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Home"
+        android:id="@+id/homeButton"
+        android:icon="@drawable/baseline_home_24"/>
+    <item android:title="Notifications"
+        android:id="@+id/notifButton"
+        android:icon="@drawable/baseline_notifications_24"/>
+    <item android:title="Profile"
+        android:id="@+id/profileButton"
+        android:icon="@drawable/person_icon"/>
+    <item android:title="Settings"
+        android:id="@+id/settingsButton"
+        android:icon="@drawable/settings_icon"/>
+</menu>
