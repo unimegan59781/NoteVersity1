@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/loginbackground"
+    tools:context=".Login">
+
+  <TextView
+      android:id="@+id/signin"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="50dp"
+      android:layout_marginTop="50dp"
+      android:layout_marginEnd="50dp"
+      android:layout_marginBottom="50dp"
+      android:gravity="center"
+      android:text="Sign in"
+      android:textColor="@color/white"
+      android:textSize="35dp"
+      android:textStyle="bold"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <EditText
+      android:id="@+id/username"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="10dp"
+      android:layout_marginTop="50dp"
+      android:layout_marginEnd="10dp"
+      android:layout_marginBottom="10dp"
+      android:background="#30ffffff"
+      android:drawableLeft="@drawable/baseline_person_outline_24"
+      android:drawablePadding="20dp"
+      android:hint="Username"
+      android:padding="20dp"
+      android:textColor="@color/white"
+      android:textColorHint="@color/white"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/signin" />
+
+  <EditText
+      android:id="@+id/password"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="10dp"
+      android:layout_marginTop="10dp"
+      android:layout_marginEnd="10dp"
+      android:layout_marginBottom="10dp"
+      android:background="#30ffffff"
+      android:drawableLeft="@drawable/baseline_key_24"
+      android:drawablePadding="20dp"
+      android:hint="Password"
+      android:inputType="textPassword"
+      android:padding="20dp"
+      android:textColor="@color/white"
+      android:textColorHint="@color/white"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/username" />
+
+  <com.google.android.material.button.MaterialButton
+      android:id="@+id/loginbtn"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="20dp"
+      android:layout_marginTop="10dp"
+      android:layout_marginEnd="20dp"
+      android:layout_marginBottom="20dp"
+      android:backgroundTint="@color/design_default_color_secondary"
+      android:text="LOGIN"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/password" />
+
+  <TextView
+      android:id="@+id/forgotpass"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="20dp"
+      android:layout_marginTop="20dp"
+      android:layout_marginEnd="20dp"
+      android:text="Forgot password?"
+      android:textColor="@color/white"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/loginbtn" />
+
+  <TextView
+      android:id="@+id/googlesignin"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="or sign in with"
+      android:textColor="@color/white"
+      app:layout_constraintBottom_toTopOf="@+id/googlesigninImage"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent" />
+
+  <LinearLayout
+      android:id="@+id/googlesigninImage"
+      android:layout_width="match_parent"
+      android:layout_height="176dp"
+      android:gravity="center"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintStart_toStartOf="parent">
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="100dp"
+        android:src="@drawable/googlesignin" />
+
+  </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
