@@ -10,8 +10,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_creation);
-        Draw note = new Draw(this);
-        setContentView(note);
+
 
 
 
