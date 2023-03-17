@@ -54,4 +54,9 @@ public class Draw extends View {
             canvas.drawPath(penPath, pen);
         }
 
+        public void clean(){ // clean note page
+        penPath.reset();
+        invalidate();
+        }
+
 }
