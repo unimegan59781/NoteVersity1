@@ -1,69 +1,86 @@
 package com.example.noteversity;
 
-
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import java.time.LocalDate;
 
-public class DbHandler {
+public class DbHandler extends SQLiteOpenHelper {
 
-        private DbModels dbModels;
+        static final int DB_VERSION = 1; // db version control
 
-        private Context context;
-
-        private SQLiteDatabase db;
-
-        public DbHandler(Context c) {
-                context = c;
+        public DbHandler(Context context) { // Blank constructor
+                super(context, "NoteVersity.DB", null, DB_VERSION);
         }
 
-        public DbHandler open() throws SQLException {
-                dbModels = new DbModels(context);
-                db = dbModels.getWritableDatabase();
-                return this;
-        }
+        SQLiteDatabase db = this.getReadableDatabase(); // gets db so can read/write to
 
-        public void close() {
-                dbModels.close();
+        @Override // links dbModles on create to generate tables
+        public void onCreate(SQLiteDatabase db) {
+                db.execSQL(DbModels.CREATEUSERS);
+                db.execSQL(DbModels.CREATEFOLDERS);
+                db.execSQL(DbModels.CREATENOTES);
+                db.execSQL(DbModels.CREATEUFLINK);
         }
 
         public void insertUser(String email, String username, String password) {
-                ContentValues contentValue = new ContentValues();
+
+                ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
+
                 contentValue.put(DbModels.EMAIL, email);
                 contentValue.put(DbModels.USERNAME, username);
                 contentValue.put(DbModels.PASSWORD, password);
-                db.insert(DbModels.tableList.get(0), null, contentValue); //null for id
+
+                db.insert(DbModels.tableList.get(0), null, contentValue); // null for filling the id
         }
 
-        public void insertFolder(Integer userID, String folderName) {
-                ContentValues contentValue = new ContentValues();
+        public void insertFolder(int userID, String folderName) {
+
+                ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
+
                 contentValue.put(DbModels.U_ID, userID);
                 contentValue.put(DbModels.FOLDER, folderName);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        contentValue.put(DbModels.TIMEDATE, String.valueOf(LocalDate.now())); // date as YYYY-MM-DD for now
-                }
-                db.insert(DbModels.tableList.get(1), null, contentValue); //null for id
+                contentValue.put(DbModels.TIMEDATE, String.valueOf(LocalDate.now())); // date as YYYY-MM-DD for now
+
+                db.insert(DbModels.tableList.get(1), null, contentValue); // null for auto fill id
         }
 
-        public void insertNotes(Integer userID, Integer folderID, String noteName, String noteIMG) {
-                ContentValues contentValue = new ContentValues();
+
+        public void insertNotes(int userID, int folderID, String noteName, String noteIMG) {
+
+                ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
+
                 contentValue.put(DbModels.U_ID, userID);
                 contentValue.put(DbModels.F_ID, folderID);
                 contentValue.put(DbModels.NAME, noteName);
-                contentValue.put(DbModels.NOTE, noteIMG);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        contentValue.put(DbModels.TIMEDATE, String.valueOf(LocalDate.now())); // date as YYYY-MM-DD for now
-                }
-                db.insert(DbModels.tableList.get(2), null, contentValue); //null for id
+                contentValue.put(DbModels.NOTEIMG, noteIMG);
+                contentValue.put(DbModels.TIMEDATE, String.valueOf(LocalDate.now())); // date as YYYY-MM-DD for now
+
+                db.insert(DbModels.tableList.get(2), null, contentValue); // null for auto filling id
         }
 
 
+//        public String getNotes(){
+//                Cursor cursor = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(2) + " WHERE "+ N_ID + "=" + 1, new String[]{}); // just incase where clause not valid
+//                cursor.moveToFirst();
+//
+//                return "cow";
+//
+//        }
+
         public void delete(Integer tablePos, Integer user) {
                 db.delete(DbModels.tableList.get(tablePos), DbModels.U_ID + "=" + user, null);
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+                db.execSQL("DROP TABLE IF EXISTS " + "USERS");
+                db.execSQL("DROP TABLE IF EXISTS " + "FOLDERS");
+                db.execSQL("DROP TABLE IF EXISTS " + "NOTES");
+                db.execSQL("DROP TABLE IF EXISTS " + "UFLINK");
+                onCreate(db);
         }
 
         // to do
