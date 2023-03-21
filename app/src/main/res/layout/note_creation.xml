@@ -26,17 +26,28 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <ImageButton
-        android:id="@+id/newNoteBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/round_corner"
-        android:contentDescription="Add Button"
-        android:src="@drawable/save_btn_icon"
-        app:layout_constraintBottom_toTopOf="@+id/navigationBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginRight="10dp" />
+    <RelativeLayout android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/newNoteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="1000dp"
+            android:layout_marginBottom="1000dp"
+            android:background="@drawable/round_corner"
+            android:contentDescription="Add Button"
+            android:src="@drawable/save_btn_icon"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/navigationBar"
@@ -59,6 +70,5 @@
         android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
