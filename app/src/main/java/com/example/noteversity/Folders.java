@@ -44,4 +44,17 @@ public class Folders extends AppCompatActivity {
         BottomNavigationView navBar = (BottomNavigationView) findViewById(R.id.bottomBar);
         navBar.setSelectedItemId(R.id.homeButton);
     }
+
+//  Functions that validates the folder title fits within 0 - 32 characters
+    public static String checkFolderTitle(String[] title) {
+        if (title.length == 0) {
+            return "Please enter a title";
+        } else if (title.length > 32) {
+            return "Please keep your title to less then 32 characters";
+        } else {
+            return "Title is acceptable";
+        }
+    }
 }
+
+
