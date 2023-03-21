@@ -81,7 +81,14 @@ public class NoteCreation extends AppCompatActivity {
             return BitmapFactory.decodeByteArray(image, 0, image.length); // takes byte and turns to bitmap
         }
     }
-
-
-
+    //  Functions that validates the note title fits within 0 - 16 characters
+    public static String checkNoteTitle(String[] title) {
+        if (title.length == 0) {
+            return "Please enter a title";
+        } else if (title.length > 16) {
+            return "Please keep your title to less then 32 characters";
+        } else {
+            return "Title is acceptable";
+        }
+    }
 }
