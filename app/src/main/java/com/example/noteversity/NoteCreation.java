@@ -3,8 +3,8 @@ package com.example.noteversity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 public class NoteCreation extends AppCompatActivity {
 
@@ -49,8 +50,8 @@ public class NoteCreation extends AppCompatActivity {
 
                 dbHandler.insertNotes(1, 1, "test", String.valueOf(noteByte)); //inserts into db
 
-                Toast.makeText(getApplicationContext(), "save works", Toast.LENGTH_LONG).show(); // test message
-
+                List<String> test = dbHandler.getNote(1); // gets note from db with note id 1
+                Log.d("NoteCreation", test.get(0)); // logcat test prove valid
             }
         });
 
