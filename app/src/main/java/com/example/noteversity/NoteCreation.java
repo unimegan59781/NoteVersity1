@@ -58,6 +58,15 @@ public class NoteCreation extends AppCompatActivity {
 
     }
 
+    public static String checkTitle(String title) {
+        if (title == "New Note") {
+            return "You need to change the title before you can sae your note";
+        } else {
+            checkNoteTitle(title);
+        }
+        return "Title is good";
+    }
+
     public class saveScreen {
 
         // draw view to bitmap
@@ -82,10 +91,10 @@ public class NoteCreation extends AppCompatActivity {
         }
     }
     //  Functions that validates the note title fits within 0 - 16 characters
-    public static String checkNoteTitle(String[] title) {
-        if (title.length == 0) {
+    public static String checkNoteTitle(String title) {
+        if (title.length() == 0) {
             return "Please enter a title";
-        } else if (title.length > 16) {
+        } else if (title.length() > 16) {
             return "Please keep your title to less then 32 characters";
         } else {
             return "Title is acceptable";
