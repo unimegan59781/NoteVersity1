@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph.xml"
+    app:startDestination="@id/folders">
+
+
+    <activity
+        android:id="@+id/notifications"
+        android:name="com.example.noteversity.Notifications"
+        android:label="notifications"
+        tools:layout="@layout/notifications" />
+    <activity
+        android:id="@+id/folders"
+        android:name="com.example.noteversity.Folders"
+        android:label="folders"
+        tools:layout="@layout/folders" />
+</navigation>
