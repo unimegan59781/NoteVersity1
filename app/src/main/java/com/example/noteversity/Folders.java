@@ -61,6 +61,12 @@ public class Folders extends AppCompatActivity {
                     return true;
                 }
 
+                if (id == R.id.profileButton) {
+                    Intent intent = new Intent(Folders.this, Profile.class);
+                    startActivity(intent);
+                    return true;
+                }
+
                 return false;
             }
         });
@@ -70,6 +76,7 @@ public class Folders extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.folders);
         navBarController();
+        System.out.println("onCreate");
 
     }
 

@@ -5,33 +5,29 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.RadioButton;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class Notifications extends AppCompatActivity {
-
+public class Profile extends AppCompatActivity {
 
     public void navBarController(){
         BottomNavigationView bottomBar = findViewById(R.id.bottomBar);
-        bottomBar.setSelectedItemId(R.id.notifButton);
+        bottomBar.setSelectedItemId(R.id.profileButton);
         bottomBar.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
 
-                if (id == R.id.homeButton){
-                    Intent intent = new Intent(Notifications.this, Folders.class);
+                if (id == R.id.notifButton) {
+                    Intent intent = new Intent(Profile.this, Notifications.class);
                     startActivity(intent);
                     return true;
                 }
 
-                if (id == R.id.profileButton) {
-                    Intent intent = new Intent(Notifications.this, Profile.class);
+                if (id == R.id.homeButton) {
+                    Intent intent = new Intent(Profile.this, Folders.class);
                     startActivity(intent);
                     return true;
                 }
@@ -44,12 +40,8 @@ public class Notifications extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.notifications);
+        setContentView(R.layout.profile);
         navBarController();
 
     }
-
 }
-
-
-
