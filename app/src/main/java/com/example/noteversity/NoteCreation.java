@@ -32,7 +32,7 @@ public class NoteCreation extends AppCompatActivity {
         String title = titleName.getText().toString();
         titleName.setText("New Note");
 
-        ImageButton saveBut = (ImageButton) findViewById(R.id.saveBtn); // save button link
+        ImageButton saveBut = (ImageButton) findViewById(R.id.newNoteBtn); // save button link
 
         RelativeLayout noteView = (RelativeLayout) findViewById(R.id.content); // create view that draw can be implemented on
         noteView.addView(note); // links draw class for user to write on screen and see buttons
