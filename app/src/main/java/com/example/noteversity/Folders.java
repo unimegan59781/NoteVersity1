@@ -90,8 +90,9 @@ public class Folders extends AppCompatActivity {
         return null; // folder doesn't exist (error checker - shouldn't occcur)
     }
 
-    public void deleteFolder(View folderName, GridLayout folder) { // delete folder from view
+    public void deleteFolder(View folderName, GridLayout folder, String name) { // delete folder from view
         folder.removeView(folderName); // removes view in grid layout folder with view thats be named
+        dbHandler.deleteFolder(name);
         // TO ADD DB DELETE CODE
         // jo + argument + kids + magic beans + fast + flat/mould
     };
@@ -118,8 +119,7 @@ public class Folders extends AppCompatActivity {
                 }
 
                 public void onSwipeLeft() {
-                    deleteFolder(folderView, folder);
-                    dbHandler.deleteFolder(folderName);
+                    deleteFolder(folderView, folder, folderName);
                 }
 
                 @Override // double tap to edit name
