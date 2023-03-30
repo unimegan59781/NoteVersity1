@@ -17,7 +17,7 @@
             android:exported="false" />
         <activity
             android:name=".Folders"
-            android:exported="true" >
+            android:exported="false"
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
