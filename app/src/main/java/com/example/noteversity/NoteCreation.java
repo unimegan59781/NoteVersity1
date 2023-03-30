@@ -51,7 +51,7 @@ public class NoteCreation extends AppCompatActivity {
                 dbHandler.insertNotes(1, 1, "test", String.valueOf(noteByte)); //inserts into db
 
                 List<String> test = dbHandler.getNote(1); // gets note from db with note id 1
-                Log.d("NoteCreation", test.get(0)); // logcat test prove valid
+                Log.d("NoteCreation", test.get(0)); // logcat test prove valid folderID
             }
         });
 

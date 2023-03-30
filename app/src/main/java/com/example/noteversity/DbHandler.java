@@ -52,11 +52,31 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.insert(DbModels.tableList.get(1), null, contentValue); // null for auto fill id
         }
 
-        public void deleteFolder(int folderID){
-                db.delete(DbModels.tableList.get(2), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete all notes in folder
-                db.delete(DbModels.tableList.get(1), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete folder
-                //db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.F_ID + "=" + folderID + "", null );
+        public List<String> getFolder(String folderName){ // gets note with given note id from raw query
+                c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.FOLDER + "=?", new String[]{folderName});
+                c.moveToFirst();
+                if (c == null) {
+                        return null;
+                }
+                String folderID = c.getString(0);
+                String userID = c.getString(1);
+                String name = c.getString(2);
+                String timedate = c.getString(3);
+                List<String> folder = Arrays.asList(folderID, userID, name, timedate);
+                c.close();
 
+                return folder; // returns string in collunm order can change and make class/object if needed
+        }
+
+        public void deleteFolder(String folderName){
+                //db.delete(DbModels.tableList.get(2), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete all notes in folder
+                List<String> folder = getFolder(folderName);
+                String folderID = folder.get(0);
+                db.delete(DbModels.tableList.get(1), DbModels.FOLDER + "=?", new String[]{folderName});
+                db.delete(DbModels.tableList.get(2), DbModels.F_ID + "=?", new String[]{folderID});
+
+                //db.delete(DbModels.tableList.get(1), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete folder
+                //db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.F_ID + "=" + folderID + "", null );
         }
 
 
@@ -113,18 +133,6 @@ public class DbHandler extends SQLiteOpenHelper {
                 return allFolders; // returns string in collunm order can change and make class/object if needed
         }
 
-        public int getFolderID(String folderName){ // gets folder with given id from raw query
-                c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.FOLDER + "=" + folderName + "", null );
-                c.moveToFirst();
-                if (c == null) {
-                        return 0;
-                }
-                int folderID = Integer.parseInt(c.getString(0));
-                c.close();
-
-                return folderID;
-        }
-
 
 
         public List<String> getNote(int nID){ // gets note with given note id from raw query
@@ -150,10 +158,6 @@ public class DbHandler extends SQLiteOpenHelper {
 
                 return note; // returns string in collunm order can change and make class/object if needed
 
-        }
-
-        public void delete(Integer tablePos, Integer user) {
-                db.delete(DbModels.tableList.get(tablePos), DbModels.U_ID + "=" + user, null);
         }
 
         @Override // stops tables being created again if already exist (user already has app installed)

@@ -6,6 +6,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -92,11 +93,12 @@ public class Folders extends AppCompatActivity {
     public void deleteFolder(View folderName, GridLayout folder) { // delete folder from view
         folder.removeView(folderName); // removes view in grid layout folder with view thats be named
         // TO ADD DB DELETE CODE
+        // jo + argument + kids + magic beans + fast + flat/mould
     };
     @SuppressLint("ClickableViewAccessibility")
     public void folderInteractions(AppCompatButton newFolder, GridLayout folder){
         View folderView = getFolder(newFolder.getText().toString(), folder); // uses get function to find view of the folder from grid layout
-        //int folderID = dbHandler.getFolderID(newFolder.getText().toString());
+        String folderName = newFolder.getText().toString();
         newFolder.setOnTouchListener(new View.OnTouchListener() {
 
             private final GestureDetector gestDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
@@ -117,12 +119,13 @@ public class Folders extends AppCompatActivity {
 
                 public void onSwipeLeft() {
                     deleteFolder(folderView, folder);
-                    //dbHandler.deleteFolder(folderID);
+                    dbHandler.deleteFolder(folderName);
                 }
 
                 @Override // double tap to edit name
                 public boolean onDoubleTap(MotionEvent e) {
                     folderView.setBackgroundColor(Color.YELLOW);
+                    //Log.d("Folder", folderID); // logcat test prove valid folderID
                     // TO CHNAGE FOLDER NAME
                     return super.onDoubleTap(e); // passes event as super to overide touch
                 }
@@ -154,14 +157,13 @@ public class Folders extends AppCompatActivity {
         //add a functino to query folders from database
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
         List<String> allFolderNames = dbHandler.getAllFolders(1);
-        for (String name : allFolderNames) {
-            AppCompatButton newFolder = createFolder(name);
-            folder.addView(newFolder);
-            folderInteractions(newFolder, folder);
+        if (allFolderNames != null){
+            for (String name : allFolderNames) {
+                AppCompatButton newFolder = createFolder(name);
+                folder.addView(newFolder);
+                folderInteractions(newFolder, folder);
+            }
         }
-
-
-
     }
 
 }
