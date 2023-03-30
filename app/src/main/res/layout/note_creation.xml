@@ -47,6 +47,18 @@
             android:src="@drawable/save_btn_icon"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <EditText
+            android:id="@+id/noteTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="60dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
     </RelativeLayout>
 
     <RelativeLayout
