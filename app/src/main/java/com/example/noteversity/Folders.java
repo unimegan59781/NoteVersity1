@@ -1,10 +1,7 @@
 package com.example.noteversity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -19,7 +16,10 @@ import android.widget.GridLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.List;
+
 public class Folders extends AppCompatActivity {
+    private DbHandler dbHandler; // imports db handler
 
 
     public android.content.Context cntx(){
@@ -46,9 +46,7 @@ public class Folders extends AppCompatActivity {
         return title; // returns title of folder to set folder name in folderCRUD
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    public void folderCRUD(android.view.View view){
-        GridLayout folder = (GridLayout) findViewById(R.id.grid);
+    public AppCompatButton createFolder(String folderName){
         AppCompatButton newFolder = new AppCompatButton(this);
         GridLayout.LayoutParams params = new GridLayout.LayoutParams(GridLayout.spec(
                 GridLayout.UNDEFINED,GridLayout.FILL,1f),
@@ -58,46 +56,25 @@ public class Folders extends AppCompatActivity {
         params.setMargins(DPtoPixels(cntx(),3),DPtoPixels(cntx(),3),DPtoPixels(cntx(),3),DPtoPixels(cntx(),6));
         newFolder.setLayoutParams(params);
         newFolder.setBackgroundResource(R.drawable.folder_view);
-        newFolder.setText(nameFolder()); // use will name function
+        newFolder.setText(folderName); // use will name function
         newFolder.setGravity(Gravity.START);
         newFolder.setGravity(Gravity.CENTER_VERTICAL);
         newFolder.setPadding(DPtoPixels(getApplicationContext(),15),0,0,0);
-        folder.addView(newFolder);
+        return newFolder;
 
-        newFolder.setOnTouchListener(new View.OnTouchListener() {
-            View folderView = getFolder(newFolder.getText().toString(), folder); // uses get function to find view of the folder from grid layout
-            private GestureDetector gestDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
-                @Override // swipe left to delete folder
-                public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                    float distanceX = e2.getX() - e1.getX(); // uses event points base code
-                    float distanceY = e2.getY() - e1.getY();
-                    if (Math.abs(distanceX) > Math.abs(distanceY) && // 100 is min threashold of speed + distance user swiped
-                            Math.abs(distanceX) > 100 &&
-                            Math.abs(velocityX) > 100) {
-                        if (distanceX < 0) { // if negative swiped to left (>0 for right if needed)
-                            deleteFolder(folderView, folder); // link to deleteFolder pass folder (grid layout) + selected folder
-                        }
-                    }
-                    return super.onFling(e1, e2, velocityX, velocityY); // passes as super so overides touch
-                }
-
-                @Override // double tap to edit name
-                public boolean onDoubleTap(MotionEvent e) {
-                    //folderView.
-                    return super.onDoubleTap(e); // passes event as super to overide touch
-                }
-
-            });
-
-            @Override // link to selected folder
-            public boolean onTouch(View v, MotionEvent event) {  // default touch in any way other than swip left + double tap therefore public
-                folderView.setBackgroundColor(Color.BLUE);
-                // TO DO LINK TO NOTES IN THIS FOLDER (NEW PAGE)
-                gestDetector.onTouchEvent(event); // links to onTouch type gesture
-                return true;
-            }
-        });
     }
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    public void folderAdd(android.view.View view){
+        GridLayout folder = (GridLayout) findViewById(R.id.grid);
+        String folderName = nameFolder();
+        AppCompatButton newFolder = createFolder(folderName);
+        folder.addView(newFolder);
+        folderInteractions(newFolder, folder);
+        dbHandler.insertFolder(1, newFolder.getText().toString()); // inserts new folder into db folders table
+
+     }
 
     public View getFolder(String folderName, GridLayout folder) { // function that loops the views in folder grid layout to find location of view with desired name
         for(int i = 0; i < folder.getChildCount(); i++) {
@@ -109,15 +86,63 @@ public class Folders extends AppCompatActivity {
                 }
             }
         }
-        return null; // folder doesn't exist
+        return null; // folder doesn't exist (error checker - shouldn't occcur)
     }
 
-    public void deleteFolder(View folderName, GridLayout folder) {
+    public void deleteFolder(View folderName, GridLayout folder) { // delete folder from view
         folder.removeView(folderName); // removes view in grid layout folder with view thats be named
+        // TO ADD DB DELETE CODE
     };
+    @SuppressLint("ClickableViewAccessibility")
+    public void folderInteractions(AppCompatButton newFolder, GridLayout folder){
+        View folderView = getFolder(newFolder.getText().toString(), folder); // uses get function to find view of the folder from grid layout
+        //int folderID = dbHandler.getFolderID(newFolder.getText().toString());
+        newFolder.setOnTouchListener(new View.OnTouchListener() {
 
+            private final GestureDetector gestDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                    float diffY = e2.getY() - e1.getY();
+                    float diffX = e2.getX() - e1.getX();
+                    if (Math.abs(diffX) > Math.abs(diffY)) {
+                        if (Math.abs(diffX) > 100 && Math.abs(velocityX) > 100) {
+                            if (diffX < 0) {
+                                onSwipeLeft();
+                            }
+                            return super.onFling(e1, e2, velocityX, velocityY);
+                        }
+                    }
+                    return super.onFling(e1, e2, velocityX, velocityY);
+                }
 
+                public void onSwipeLeft() {
+                    deleteFolder(folderView, folder);
+                    //dbHandler.deleteFolder(folderID);
+                }
 
+                @Override // double tap to edit name
+                public boolean onDoubleTap(MotionEvent e) {
+                    folderView.setBackgroundColor(Color.YELLOW);
+                    // TO CHNAGE FOLDER NAME
+                    return super.onDoubleTap(e); // passes event as super to overide touch
+                }
+
+                @Override
+                public boolean onSingleTapConfirmed(MotionEvent e) {
+                    folderView.setBackgroundColor(Color.BLUE);
+                    // TO GO TO VIEW
+                    return super.onSingleTapConfirmed(e);
+                }
+
+            });
+
+            public boolean onTouch(View v, MotionEvent event) {
+                gestDetector.onTouchEvent(event);
+                return true;
+            }
+        });
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +150,18 @@ public class Folders extends AppCompatActivity {
         setContentView(R.layout.folders);
         BottomNavigationView navBar = findViewById(R.id.bottomBar);
         navBar.setSelectedItemId(R.id.homeButton);
+        dbHandler = new DbHandler(Folders.this);
         //add a functino to query folders from database
+        GridLayout folder = (GridLayout) findViewById(R.id.grid);
+        List<String> allFolderNames = dbHandler.getAllFolders(1);
+        for (String name : allFolderNames) {
+            AppCompatButton newFolder = createFolder(name);
+            folder.addView(newFolder);
+            folderInteractions(newFolder, folder);
+        }
+
+
+
     }
 
 }

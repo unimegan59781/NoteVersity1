@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,6 +52,13 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.insert(DbModels.tableList.get(1), null, contentValue); // null for auto fill id
         }
 
+        public void deleteFolder(int folderID){
+                db.delete(DbModels.tableList.get(2), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete all notes in folder
+                db.delete(DbModels.tableList.get(1), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete folder
+                //db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.F_ID + "=" + folderID + "", null );
+
+        }
+
 
         public void insertNotes(int userID, int folderID, String noteName, String noteIMG) {
 
@@ -82,22 +90,42 @@ public class DbHandler extends SQLiteOpenHelper {
                 return folder; // returns string in collunm order can change and make class/object if needed
         }
 
-        public List<String> getFolder(int fID){ // gets folder with given id from raw query
-                c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.F_ID + "=" + fID + "", null );
+        public List<String> getAllFolders(int uID){ // gets folder with given id from raw query
+                List<String> allFolders = new ArrayList<>();
+                c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.U_ID + "=" + uID + "", null );
                 c.moveToFirst();
+
+                if (c != null && c.moveToFirst()) {
+                        do {
+                                String folderName = c.getString(2);
+                                allFolders.add(folderName);
+                        } while (c.moveToNext());
+                }
                 if (c == null) {
                         return null;
                 }
-
-                String folderID = c.getString(0);
-                String userID = c.getString(1);
-                String folderName = c.getString(2);
-                String timedate = c.getString(3);
-                List<String> folder = Arrays.asList(folderID, userID, folderName, timedate);
+//                String folderID = c.getString(0);
+//                String userID = c.getString(1);
+//                String timedate = c.getString(3);
+//                List<String> folder = Arrays.asList(folderID, userID, folderName, timedate);
                 c.close();
 
-                return folder; // returns string in collunm order can change and make class/object if needed
+                return allFolders; // returns string in collunm order can change and make class/object if needed
         }
+
+        public int getFolderID(String folderName){ // gets folder with given id from raw query
+                c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.FOLDER + "=" + folderName + "", null );
+                c.moveToFirst();
+                if (c == null) {
+                        return 0;
+                }
+                int folderID = Integer.parseInt(c.getString(0));
+                c.close();
+
+                return folderID;
+        }
+
+
 
         public List<String> getNote(int nID){ // gets note with given note id from raw query
                 c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.N_ID + "=" + nID + "", null );
