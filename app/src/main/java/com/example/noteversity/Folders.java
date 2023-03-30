@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -94,7 +95,6 @@ public class Folders extends AppCompatActivity {
         folder.removeView(folderName); // removes view in grid layout folder with view thats be named
         dbHandler.deleteFolder(name);
         // TO ADD DB DELETE CODE
-        // jo + argument + kids + magic beans + fast + flat/mould
     };
     @SuppressLint("ClickableViewAccessibility")
     public void folderInteractions(AppCompatButton newFolder, GridLayout folder){
@@ -133,6 +133,7 @@ public class Folders extends AppCompatActivity {
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
                     folderView.setBackgroundColor(Color.BLUE);
+                    startActivity(new Intent(Folders.this, NotesPages.class));
                     // TO GO TO VIEW
                     return super.onSingleTapConfirmed(e);
                 }

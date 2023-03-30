@@ -1,12 +1,16 @@
 package com.example.noteversity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -17,15 +21,25 @@ public class NotesPages extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notes_page);
         FloatingActionButton createNoteButton = findViewById(R.id.newNoteBtn);
+        ImageButton backButton = findViewById(R.id.backButton);
 
         createNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent change = new Intent(getApplicationContext(), NoteCreation.class);
-                startActivity(change);
-
+            public void onClick(View v) {
+                startActivity(new Intent(NotesPages.this, NoteCreation.class));
             }
-    });
+        });
+
+
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(NotesPages.this, Folders.class));
+            }
+        });
+
+    };
 
 
     }
@@ -47,5 +61,4 @@ public class NotesPages extends AppCompatActivity {
 //
 //        return super.onOptionsItemSelected(item);
 //    }
-}
 
