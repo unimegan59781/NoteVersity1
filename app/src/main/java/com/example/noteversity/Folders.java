@@ -56,14 +56,13 @@ public class Folders extends AppCompatActivity {
                 int id = item.getItemId();
 
                 if (id == R.id.notifButton) {
-                    Intent intent = new Intent(Folders.this, Notifications.class);
-                    startActivity(intent);
+
+                    startActivity(new Intent(Folders.this, Notifications.class));
                     return true;
                 }
 
                 if (id == R.id.profileButton) {
-                    Intent intent = new Intent(Folders.this, Profile.class);
-                    startActivity(intent);
+                    startActivity(new Intent(Folders.this, Profile.class));
                     return true;
                 }
 
