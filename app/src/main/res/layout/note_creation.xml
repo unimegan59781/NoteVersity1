@@ -16,7 +16,60 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+<!--        <EditText-->
+<!--            android:id="@+id/noteTitle"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_marginStart="60dp"-->
+<!--            android:layout_marginTop="1dp"-->
+<!--            android:text="@string/NewNote"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textStyle="bold"-->
+<!--            android:inputType="text"/>-->
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/bannerTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar">
+
+
+
+        <RelativeLayout
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/saveBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="65dp"
+                android:background="@drawable/round_corner"
+                android:contentDescription="Save Button"
+                android:src="@drawable/save_btn_icon"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+<!--            <EditText-->
+<!--                android:id="@+id/noteTitle"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:layout_marginStart="60dp"-->
+<!--                android:layout_marginTop="1dp"-->
+<!--                android:text="@string/NewNote"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="bold"-->
+<!--                android:inputType="text"/>-->
+
+        </RelativeLayout>
         <EditText
+            android:id="@+id/noteTitle"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_marginStart="60dp"
@@ -25,46 +78,9 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:inputType="text"/>
-    </RelativeLayout>
-
-    <RelativeLayout android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageButton
-            android:id="@+id/newNoteBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="65dp"
-            android:background="@drawable/round_corner"
-            android:contentDescription="Add Button"
-            android:src="@drawable/save_btn_icon"
-            app:layout_constraintEnd_toEndOf="parent" />
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/navigationBar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-
-        android:background="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
-
-
-    </RelativeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomBar"
@@ -72,6 +88,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

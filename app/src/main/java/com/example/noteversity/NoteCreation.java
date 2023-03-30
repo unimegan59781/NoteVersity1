@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -23,12 +24,15 @@ public class NoteCreation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_creation);
 
-        Draw note = new Draw(this); // creates new isntace of draw class so user can create note
+        Draw note = new Draw(this); // creates new instance of draw class so user can create note
 
         dbHandler = new DbHandler(NoteCreation.this); // links db handler to class and with variable dbHandler to call later
 
+        EditText titleName = findViewById(R.id.noteTitle);
+        String title = titleName.getText().toString();
+        titleName.setText("New Note");
 
-        ImageButton saveBut = (ImageButton) findViewById(R.id.newNoteBtn); // save button link
+        ImageButton saveBut = (ImageButton) findViewById(R.id.saveBtn); // save button link
 
         RelativeLayout noteView = (RelativeLayout) findViewById(R.id.content); // create view that draw can be implemented on
         noteView.addView(note); // links draw class for user to write on screen and see buttons
@@ -41,7 +45,7 @@ public class NoteCreation extends AppCompatActivity {
                 Bitmap noteBitmap = saveScreen.toBitmap(noteView); // turns view to bitmap - just draw view so buttons don't save in image
                 byte[] noteByte = saveScreen.toBytes(noteBitmap); // turns bitmap to Byte to save in db
 
-                //Bitmap ByteToBitmap = saveScreen.toImage(noteByte); // turns Byte to bitmap frob db so can set drawbale in notePng
+                //Bitmap ByteToBitmap = saveScreen.toImage(noteByte); // turns Byte to bitmap for db so can set drawable in notePng
                 //BitmapDrawable notePng = new BitmapDrawable(getResources(), ByteToBitmap);
                 //noteView.setBackground(notePng);
 
@@ -60,7 +64,7 @@ public class NoteCreation extends AppCompatActivity {
 
     public static String checkTitle(String title) {
         if (title == "New Note") {
-            return "You need to change the title before you can sae your note";
+            return "You need to change the title before you can save your note";
         } else {
             checkNoteTitle(title);
         }
