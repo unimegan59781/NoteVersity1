@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class NoteCreation extends AppCompatActivity {
@@ -25,6 +29,12 @@ public class NoteCreation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_creation);
 
+        Intent intent = getIntent();
+        String noteIMG = intent.getStringExtra("noteIMG");
+        Boolean oldNote = intent.getBooleanExtra("previousNote", false);
+        Log.d("NoteCreation", String.valueOf(oldNote));
+
+
         Draw note = new Draw(this); // creates new isntace of draw class so user can create note
 
         dbHandler = new DbHandler(NoteCreation.this); // links db handler to class and with variable dbHandler to call later
@@ -33,58 +43,61 @@ public class NoteCreation extends AppCompatActivity {
         ImageButton saveBut = (ImageButton) findViewById(R.id.newNoteBtn); // save button link
 
         RelativeLayout noteView = (RelativeLayout) findViewById(R.id.content); // create view that draw can be implemented on
-        noteView.addView(note); // links draw class for user to write on screen and see buttons
+         // links draw class for user to write on screen and see buttons
+        if (oldNote) {
+            byte[] byteIMG = noteIMG.getBytes(StandardCharsets.UTF_8);
+
+            getScreen(byteIMG, noteView);
+            //noteView.setBackground(backgroundIMG);
+
+            //noteView.setBackground(notePng);
+            //noteView.setBackgroundColor(Color.TRANSPARENT);
+            noteView.addView(note);
+        } else {
+            noteView.addView(note);
+        }
 
         saveBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"SAVED BUTTON CLICKED", Toast.LENGTH_LONG).show(); // test message
+                Toast.makeText(getApplicationContext(), "SAVED BUTTON CLICKED", Toast.LENGTH_LONG).show(); // test message
 
-                Bitmap noteBitmap = saveScreen.toBitmap(noteView); // turns view to bitmap - just draw view so buttons don't save in image
-                byte[] noteByte = saveScreen.toBytes(noteBitmap); // turns bitmap to Byte to save in db
-
-                //Bitmap ByteToBitmap = saveScreen.toImage(noteByte); // turns Byte to bitmap frob db so can set drawbale in notePng
-                //BitmapDrawable notePng = new BitmapDrawable(getResources(), ByteToBitmap);
-                //noteView.setBackground(notePng);
-
+                byte[] byteIMG = saveScreen(noteView);
                 note.clean();
+                getScreen(byteIMG, noteView);
+                //
 
-                dbHandler.insertNotes(1, 1, "test", String.valueOf(noteByte)); //inserts into db
+                dbHandler.insertNotes(1, 2, "test171", String.valueOf(byteIMG)); //inserts into db
 
-                List<String> test = dbHandler.getNote(1); // gets note from db with note id 1
-                Log.d("NoteCreation", test.get(0)); // logcat test prove valid
-                startActivity(new Intent(NoteCreation.this, NotesPages.class));
+                //List<String> test = dbHandler.getNote(1); // gets note from db with note id 1
+                //Log.d("NoteCreation", test.get(0)); // logcat test prove valid
+                //startActivity(new Intent(NoteCreation.this, NotesPages.class));
             }
-        });
+        });//
 
-        //
-
-    }
-
-    public class saveScreen {
-
-        // draw view to bitmap
-        public static Bitmap toBitmap(View view) {
-            Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888); // gets screen dimensions + pixels
-            Canvas canvas = new Canvas(bitmap);
-            view.draw(canvas); // saves screen state so when saving doesn't crash when user interacts with screen
-            return bitmap;
-        }
-
-
-        // bitmap to byte array for DB save
-        public static byte[] toBytes(Bitmap bitmap) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream); // compress to png and links output stream so can save to db
-            return stream.toByteArray();
-        }
-
-        // byte to bitmap
-        public static Bitmap toImage(byte[] image) {
-            return BitmapFactory.decodeByteArray(image, 0, image.length); // takes byte and turns to bitmap
-        }
     }
     //  Functions that validates the note title fits within 0 - 16 characters
+
+    public byte[] saveScreen(View noteView) {
+        int viewWidth = noteView.getWidth();
+        int viewHeight = noteView.getHeight();
+        Bitmap bitmap = Bitmap.createBitmap(viewWidth, viewHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        noteView.draw(canvas);
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
+    }
+
+    public void getScreen(byte[] byteArray, View noteView){
+        // Set the byte array as the background of the other view
+        Bitmap bitmapFromByteArray = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        Drawable noteIMG = new BitmapDrawable(getResources(), bitmapFromByteArray);
+        noteView.setBackground(noteIMG);
+    }
+
     public static String checkNoteTitle(String[] title) {
         if (title.length == 0) {
             return "Please enter a title";

@@ -20,6 +20,7 @@ public class DbHandler extends SQLiteOpenHelper {
         }
 
         SQLiteDatabase db = this.getReadableDatabase(); // gets db so can read/write
+        //SQLiteDatabase dbb = this.getWritableDatabase();
         Cursor c;
 
         @Override // links dbModles on create to generate tables
@@ -79,6 +80,13 @@ public class DbHandler extends SQLiteOpenHelper {
                 //db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.F_ID + "=" + folderID + "", null );
         }
 
+        public void deleteNote(String noteName){
+                db.delete(DbModels.tableList.get(2), DbModels.NAME + "=?", new String[]{noteName});
+
+                //db.delete(DbModels.tableList.get(1), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete folder
+                //db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.F_ID + "=" + folderID + "", null );
+        }
+
 
         public void insertNotes(int userID, int folderID, String noteName, String noteIMG) {
 
@@ -133,7 +141,36 @@ public class DbHandler extends SQLiteOpenHelper {
                 return allFolders; // returns string in collunm order can change and make class/object if needed
         }
 
+        public List<String> getFolderNotes(int fID){ // gets note with given note id from raw query
+                List<String> noteNames = new ArrayList<>();
+                c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.F_ID + "=" + fID + "", null );
+                c.moveToFirst();
+                if (c != null && c.moveToFirst()) {
+                        do {
+                                String noteName = c.getString(3);
+                                noteNames.add(noteName);
+                        } while (c.moveToNext());
+                }
+                if (c == null) {
+                        return null;
+                }
+                c.close();
 
+                return noteNames; // returns string in collunm order can change and make class/object if needed
+        }
+
+
+        public String getNoteImg(String noteName){ // gets note with given note id from raw query
+                c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.NAME + "=?", new String[] { noteName });
+                c.moveToFirst();
+                String noteImg = c.getString(4);
+                if (c == null) {
+                        return null;
+                }
+                c.close();
+
+                return noteImg; // returns string in collunm order can change and make class/object if needed
+        }
 
         public List<String> getNote(int nID){ // gets note with given note id from raw query
                 c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.N_ID + "=" + nID + "", null );
@@ -166,6 +203,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.execSQL("DROP TABLE IF EXISTS " + "FOLDERS");
                 db.execSQL("DROP TABLE IF EXISTS " + "NOTES");
                 db.execSQL("DROP TABLE IF EXISTS " + "UFLINK");
+
                 onCreate(db);
         }
 

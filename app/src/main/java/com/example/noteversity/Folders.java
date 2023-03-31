@@ -135,8 +135,13 @@ public class Folders extends AppCompatActivity {
 
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
-                    folderView.setBackgroundColor(Color.BLUE);
-                    startActivity(new Intent(Folders.this, NotesPages.class));
+                    //folderView.setBackgroundColor(Color.BLUE);
+                    //startActivity(new Intent(Folders.this, NotesPages.class));
+                    List<String> folder = dbHandler.getFolder(folderName);
+                    String folderID = folder.get(0);
+                    Intent i = new Intent(Folders.this, NotesPages.class);
+                    i.putExtra("F_ID", folderID);// key is used to get value in Second Activiy
+                    startActivity(i);
                     // TO GO TO VIEW
                     return super.onSingleTapConfirmed(e);
                 }
@@ -158,6 +163,13 @@ public class Folders extends AppCompatActivity {
         BottomNavigationView navBar = findViewById(R.id.bottomBar);
         navBar.setSelectedItemId(R.id.homeButton);
         dbHandler = new DbHandler(Folders.this);
+//
+//        dbHandler.insertFolder(1, "test");
+//        dbHandler.insertNotes(1, 2, "test1", String.valueOf(12));
+//        dbHandler.insertNotes(1, 2, "test2", String.valueOf(34));
+//        dbHandler.insertNotes(1, 2, "test3", String.valueOf(65));
+
+
         //add a functino to query folders from database
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
         List<String> allFolderNames = dbHandler.getAllFolders(1);

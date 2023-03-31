@@ -23,6 +23,8 @@ import java.util.List;
 
 public class NotesPages extends AppCompatActivity {
 
+    private DbHandler dbHandler;
+
     public android.content.Context cntx(){
         return getApplicationContext();
     }
@@ -39,15 +41,23 @@ public class NotesPages extends AppCompatActivity {
         FloatingActionButton createNoteButton = findViewById(R.id.newNoteBtn);
         ImageButton backButton = findViewById(R.id.backButton);
 
+        dbHandler = new DbHandler(NotesPages.this);
+
+        Intent intent = getIntent();
+        int folderID = Integer.parseInt(intent.getStringExtra("F_ID"));
         GridLayout grid = (GridLayout) findViewById(R.id.grid);
-        List<String> allNotes = Arrays.asList("dog", "cat");
+        List<String> allNotes = dbHandler.getFolderNotes(folderID);//Arrays.asList("dog", "cat");
         if (allNotes != null){
             for (String name : allNotes) {
-                AppCompatButton newNote = createNote(name);
+                String noteIMG = dbHandler.getNoteImg(name);
+                AppCompatButton newNote = createNote(name, noteIMG);
                 grid.addView(newNote);
                 noteInteractions(newNote, grid);
             }
+        } else {
+            // TO DO ERROR CHECK
         }
+
 
         createNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +97,7 @@ public class NotesPages extends AppCompatActivity {
 
                 public void onSwipeLeft() {
                     noteView.setBackgroundColor(Color.RED);
+                    deleteNote(noteView, grid, noteName);
                 }
 
                 @Override // double tap to edit name
@@ -101,6 +112,12 @@ public class NotesPages extends AppCompatActivity {
                 public boolean onSingleTapConfirmed(MotionEvent e) {
                     noteView.setBackgroundColor(Color.BLUE);
                     // TO GO TO VIEW
+                    String noteIMG = dbHandler.getNoteImg(noteName);
+                    Intent i = new Intent(NotesPages.this, NoteCreation.class);
+                    i.putExtra("noteIMG", noteIMG);// key is used to get value in Second Activiy
+                    i.putExtra("previousNote", true);
+                    startActivity(i);
+
                     return super.onSingleTapConfirmed(e);
                 }
 
@@ -127,13 +144,14 @@ public class NotesPages extends AppCompatActivity {
         return null; // folder doesn't exist (error checker - shouldn't occcur)
     }
 
-    public void deleteFolder(View noteView, GridLayout grid, String name) { // delete folder from view
+    public void deleteNote(View noteView, GridLayout grid, String name) { // delete folder from view
         grid.removeView(noteView); // removes view in grid layout folder with view thats be named
+        dbHandler.deleteNote(name);
         //dbHandler.deleteFolder(name);
         // TO ADD DB DELETE CODE
         };
 
-    public AppCompatButton createNote(String noteName){
+    public AppCompatButton createNote(String noteName, String noteIMG){
         AppCompatButton newNote = new AppCompatButton(this);
         GridLayout.LayoutParams params = new GridLayout.LayoutParams(GridLayout.spec(
                 GridLayout.UNDEFINED,GridLayout.FILL,1f),
@@ -143,6 +161,7 @@ public class NotesPages extends AppCompatActivity {
         newNote.setLayoutParams(params);
         newNote.setBackgroundResource(R.drawable.folder_view); /// TO DO SET PNG
         newNote.setText(noteName); // use will name function
+        //newNote.set
         newNote.setGravity(Gravity.START);
         newNote.setGravity(Gravity.CENTER_VERTICAL);
         newNote.setPadding(DPtoPixels(getApplicationContext(),15),0,0,0);
