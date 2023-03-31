@@ -36,16 +36,19 @@ public class Folders extends AppCompatActivity {
     public String nameFolder (){ // function to name folder + name validation //REUSE NOTES
         EditText name = (EditText) findViewById(R.id.folderNameEdit);
         String title = name.getText().toString();
-
+//        List<String> nameLookUp = dbHandler.getFolder(title);
 //        if (title.length() == 0) {
 //            return "Please enter a title";
 //        } else if (title.length() > 32) {
 //            return "Please keep your title to less then 32 characters";
-//        } else {
-//            return "Title is acceptable";
+//        } else if (nameLookUp != null){
+//            return "name already taken";
+//        } else{
+//            name.setText("");
+////            return title;
 //        }
-        name.setText(""); // clears the text edit
-        return title; // returns title of folder to set folder name in folderCRUD
+        name.setText("");
+        return title;
     }
 
     public AppCompatButton createFolder(String folderName){
@@ -168,5 +171,3 @@ public class Folders extends AppCompatActivity {
     }
 
 }
-
-
