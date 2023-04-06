@@ -42,6 +42,10 @@ public class NoteCreation extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(),"SAVED BUTTON CLICKED", Toast.LENGTH_LONG).show(); // test message
 
+                EditText titleName = findViewById(R.id.noteTitle);
+                String title = titleName.getText().toString();
+                checkTitle(title);
+
                 Bitmap noteBitmap = saveScreen.toBitmap(noteView); // turns view to bitmap - just draw view so buttons don't save in image
                 byte[] noteByte = saveScreen.toBytes(noteBitmap); // turns bitmap to Byte to save in db
 
@@ -62,9 +66,9 @@ public class NoteCreation extends AppCompatActivity {
 
     }
 
-    public static String checkTitle(String title) {
+    public String checkTitle(String title) {
         if (title == "New Note") {
-            return "You need to change the title before you can save your note";
+            Toast.makeText(getApplicationContext(),"Please enter a title", Toast.LENGTH_LONG).show();
         } else {
             checkNoteTitle(title);
         }
