@@ -37,7 +37,7 @@ public class SecondLoginActivity extends AppCompatActivity {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this,gso);
 
-        // this gets the last sign-in account and displays the name & email
+        // this gets the last sign-in account and displays the name and email
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
         if(acct!=null){
             String personName = acct.getDisplayName();
