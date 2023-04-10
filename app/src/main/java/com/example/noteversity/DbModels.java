@@ -32,6 +32,7 @@ public class DbModels { // TO COMMENT
     public static final String SenderID  = "SenderID";
     public static final String RecipientID = "RecipientID";
     public static final String Folder = "FolderID";
+    public static boolean invite = false;
 
     // TABLE CREATION
     public static String CREATEUSERS = "create table " + tableList.get(0)
