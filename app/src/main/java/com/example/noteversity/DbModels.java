@@ -9,7 +9,7 @@ import java.util.List;
 
 public class DbModels { // TO COMMENT
 
-    static List<String> tableList = Arrays.asList("USERS", "FOLDERS", "NOTES", "UFLINK"); //list of table names -- KEEP ORDER FOR CROSS REFERNCING
+    static List<String> tableList = Arrays.asList("USERS", "FOLDERS", "NOTES","UFLINK","NOTIFICATIONS"); //list of table names -- KEEP ORDER FOR CROSS REFERNCING
 
     // USERS TABLE
     public static final String U_ID = "userID";
@@ -28,11 +28,12 @@ public class DbModels { // TO COMMENT
     public static final String NOTEIMG = "noteImg";
 
     // NOTIFICATIONS TABLE
-    public static final String Notification_ID = "notificationID";
-    public static final String SenderID  = "SenderID";
-    public static final String RecipientID = "RecipientID";
-    public static final String Folder = "FolderID";
-    public static boolean invite = false;
+    public static final String NF_ID = "notificationID";
+    public static final String SENDER_ID  = "senderID";
+    public static final String RECIPIENT_ID = "recipientID";
+    public static final String FOLDER_ID = "folderID";
+    public static final String FOLDER_NAME = "folderName";
+    public static final String INVITE = "invite";
 
     // TABLE CREATION
     public static String CREATEUSERS = "create table " + tableList.get(0)
@@ -58,5 +59,14 @@ public class DbModels { // TO COMMENT
     public static String CREATEUFLINK = "create table " + tableList.get(3)
             + "(" + F_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + U_ID + " INTEGER NOT NULL);";
+
+    public static String CREATENOTIFICATIONS = "create table " + tableList.get(4)
+            + "(" + NF_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + SENDER_ID + " INTEGER NOT NULL, "
+            + RECIPIENT_ID + " INTEGER NOT NULL, "
+            + FOLDER_ID + " INTEGER NOT NULL, "
+            + FOLDER_NAME + " TEXT NOT NULL, "
+            + INVITE + " BOOLEAN, "
+            + TIMEDATE  + " NOT NULL);";
 
 }
