@@ -27,6 +27,11 @@ public class DbModels { // TO COMMENT
     public static final String NAME = "noteName";
     public static final String NOTEIMG = "noteImg";
 
+    // NOTIFICATIONS TABLE
+    public static final String Notification_ID = "notificationID";
+    public static final String SenderID  = "SenderID";
+    public static final String RecipientID = "RecipientID";
+    public static final String Folder = "FolderID";
 
     // TABLE CREATION
     public static String CREATEUSERS = "create table " + tableList.get(0)
