@@ -5,39 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="visible"
+    android:background="@drawable/loginbackground"
     tools:context=".Notifications"
     tools:visibility="visible">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="735dp"
-        android:layout_height="57dp"
-        android:background="#4B79BD"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="-30dp"
-        android:layout_marginTop="-8dp"
-        app:layout_constraintStart_toStartOf="@+id/toolbar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <TextView
         android:id="@+id/textTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
+        android:layout_marginStart="130dp"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-medium"
         android:text="Notifications"
         android:textColor="#000000"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,9 +27,10 @@
         android:id="@+id/textNotiCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="70dp"
         android:layout_marginEnd="15dp"
         android:text="0 Notifications Unread:"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -55,9 +38,10 @@
         android:id="@+id/textSelectedCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="70dp"
         android:text="0 Selected"
+        android:textColor="@color/white"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -65,23 +49,25 @@
     <Button
         android:id="@+id/btnClearSelected"
         android:layout_width="115dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="100dp"
         android:background="@drawable/rounded_button"
+        android:onClick="addTableRow"
         android:text="Clear Selected"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btnMarkUnread"
         android:layout_width="115dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginStart="20dp"
         android:background="@drawable/rounded_button"
         android:text="Mark Un/Read"
+        android:onClick="addNameRows"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/btnClearSelected"
@@ -90,85 +76,54 @@
     <Button
         android:id="@+id/btnOpen"
         android:layout_width="115dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_marginStart="20dp"
         android:background="@drawable/rounded_button"
         android:text="Open"
+        android:onClick="open"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/btnMarkUnread"
         app:layout_constraintTop_toTopOf="@+id/btnMarkUnread" />
 
     <ScrollView
-        android:layout_width="409dp"
-        android:layout_height="550dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_width="370dp"
+        android:layout_height="490dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnClearSelected">
 
         <TableLayout
             android:id="@+id/tableLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="160dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="12dp"
             android:stretchColumns="1,2,3">
 
+
             <TableRow
+                android:id="@+id/rowBuffer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <CheckBox
-                    android:id="@+id/checkBoxRow1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/bufferTextView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:text="Row 1" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" />
+                    android:layout_height="130dp" />
 
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <CheckBox
-                    android:id="@+id/checkBoxRow2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:text="Row 2" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
         </TableLayout>
     </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
