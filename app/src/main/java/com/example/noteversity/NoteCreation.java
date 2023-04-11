@@ -63,7 +63,11 @@ public class NoteCreation extends AppCompatActivity {
         saveBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "SAVED BUTTON CLICKED", Toast.LENGTH_LONG).show(); // test message
+                Toast.makeText(getApplicationContext(),"SAVED BUTTON CLICKED", Toast.LENGTH_LONG).show(); // test message
+
+                EditText titleName = findViewById(R.id.noteTitle);
+                String title = titleName.getText().toString();
+                checkTitle(title);
 
                 byte[] byteIMG = saveScreen(noteView); // get byte array of view
                 String byteStingIMG = Base64.encodeToString(byteIMG, Base64.DEFAULT); // set to string to save in db
@@ -82,9 +86,9 @@ public class NoteCreation extends AppCompatActivity {
 
     }
     
-    public static String checkTitle(String title) {
+    public String checkTitle(String title) {
         if (title == "New Note") {
-            return "You need to change the title before you can save your note";
+            Toast.makeText(getApplicationContext(),"Please enter a title", Toast.LENGTH_LONG).show();
         } else {
             checkNoteTitle(title);
         }
