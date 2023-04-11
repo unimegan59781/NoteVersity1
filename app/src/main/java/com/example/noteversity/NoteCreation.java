@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -40,6 +41,9 @@ public class NoteCreation extends AppCompatActivity {
 
         dbHandler = new DbHandler(NoteCreation.this); // links db handler to class and with variable dbHandler to call later
 
+        EditText titleName = findViewById(R.id.noteTitle);
+        String title = titleName.getText().toString();
+        titleName.setText("New Note");
 
         ImageButton saveBut = (ImageButton) findViewById(R.id.newNoteBtn); // save button link
 
@@ -77,7 +81,15 @@ public class NoteCreation extends AppCompatActivity {
         });//
 
     }
-    //  Functions that validates the note title fits within 0 - 16 characters
+    
+    public static String checkTitle(String title) {
+        if (title == "New Note") {
+            return "You need to change the title before you can save your note";
+        } else {
+            checkNoteTitle(title);
+        }
+        return "Title is good";
+    }
 
     public byte[] saveScreen(View noteView) { // saves state of screen to bitmap to save as byte for db
         Bitmap bitmapIMG = Bitmap.createBitmap(noteView.getWidth(), noteView.getHeight(), Bitmap.Config.ARGB_8888); // creates bitmap from view
@@ -95,11 +107,12 @@ public class NoteCreation extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length); // turns byte[] to bitmap
         return bitmap;
     }
-
-    public static String checkNoteTitle(String[] title) {
-        if (title.length == 0) {
+    
+    //  Functions that validates the note title fits within 0 - 16 characters
+    public static String checkNoteTitle(String title) {
+        if (title.length() == 0) {
             return "Please enter a title";
-        } else if (title.length > 16) {
+        } else if (title.length() > 16) {
             return "Please keep your title to less then 32 characters";
         } else {
             return "Title is acceptable";

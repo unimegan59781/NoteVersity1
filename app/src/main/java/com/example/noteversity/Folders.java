@@ -1,11 +1,13 @@
 package com.example.noteversity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -14,10 +16,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.view.MenuItem;
 import android.widget.GridLayout;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.List;
 
@@ -25,9 +29,10 @@ public class Folders extends AppCompatActivity {
     private DbHandler dbHandler; // imports db handler
 
 
-    public android.content.Context cntx(){
+    public android.content.Context cntx() {
         return getApplicationContext();
     }
+
     public static int DPtoPixels(android.content.Context context, int dp) {
         float scale = context.getResources().getDisplayMetrics().density;
         int pixels = (int) (dp * scale + 0.5f);
@@ -158,9 +163,33 @@ public class Folders extends AppCompatActivity {
                 return true;
             }
         });
-
+        newFolder.setPadding(DPtoPixels(getApplicationContext(), 15), 0, 0, 0);
+        grid.addView(newFolder);
     }
 
+    public void navBarController(){
+        BottomNavigationView bottomBar = findViewById(R.id.bottomBar);
+        bottomBar.setSelectedItemId(R.id.homeButton);
+        bottomBar.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.notifButton) {
+
+                    startActivity(new Intent(Folders.this, Notifications.class));
+                    return true;
+                }
+
+                if (id == R.id.profileButton) {
+                    startActivity(new Intent(Folders.this, Profile.class));
+                    return true;
+                }
+
+                return false;
+            }
+        });
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,12 +197,6 @@ public class Folders extends AppCompatActivity {
         BottomNavigationView navBar = findViewById(R.id.bottomBar);
         navBar.setSelectedItemId(R.id.homeButton);
         dbHandler = new DbHandler(Folders.this);
-//
-//        dbHandler.insertFolder(1, "test");
-//        dbHandler.insertNotes(1, 2, "test1", String.valueOf(12));
-//        dbHandler.insertNotes(1, 2, "test2", String.valueOf(34));
-//        dbHandler.insertNotes(1, 2, "test3", String.valueOf(65));
-
 
         //add a functino to query folders from database
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
@@ -184,10 +207,20 @@ public class Folders extends AppCompatActivity {
                 folder.addView(newFolder);
                 folderInteractions(newFolder, folder);
             }
+        navBarController();
+        System.out.println("onCreate");
+
+    }
+
+    //  Functions that validates the folder title fits within 0 - 32 characters
+    public static String checkFolderTitle(String[] title) {
+        if (title.length == 0) {
+            return "Please enter a title";
+        } else if (title.length > 32) {
+            return "Please keep your title to less then 32 characters";
         } else {
             Toast.makeText(getApplicationContext(), "NEW ACCOUNT", Toast.LENGTH_LONG).show(); // test message
         }
-
     }
 
 }
