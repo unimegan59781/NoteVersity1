@@ -8,7 +8,6 @@
     android:orientation="vertical"
     tools:context=".Folders">
 
-
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -38,15 +37,22 @@
 
 
         </GridLayout>
-
     </ScrollView>
+
+    <EditText
+        android:id="@+id/folderNameEdit"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:backgroundTint="@color/purple_500"
-        android:onClick="addFolder"
+        android:onClick="folderAdd"
         android:src="@drawable/plus_icon"
         app:fabCustomSize="60dp"
         app:layout_constraintBottom_toTopOf="@id/bottomBar"
@@ -55,7 +61,6 @@
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
@@ -63,6 +68,7 @@
         android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

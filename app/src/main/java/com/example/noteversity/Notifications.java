@@ -2,10 +2,14 @@ package com.example.noteversity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.graphics.Color;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,13 +17,42 @@ import android.widget.RadioButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
 import java.util.ArrayList;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 public class Notifications extends AppCompatActivity {
+
     public ArrayList<String> UserIDs = new ArrayList<String>();
-    public ArrayList<Notification> Notis = new ArrayList<Notification>();
-    private Button openButton;
+        public ArrayList<Notification> Notis = new ArrayList<Notification>();
+        private Button openButton;
+
+
+    public void navBarController(){
+        BottomNavigationView bottomBar = findViewById(R.id.bottomBar);
+        bottomBar.setSelectedItemId(R.id.notifButton);
+        bottomBar.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.homeButton){
+                    Intent intent = new Intent(Notifications.this, Folders.class);
+                    startActivity(intent);
+                    return true;
+                }
+
+                if (id == R.id.profileButton) {
+                    Intent intent = new Intent(Notifications.this, Profile.class);
+                    startActivity(intent);
+                    return true;
+                }
+
+                return false;
+            }
+        });
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,5 +234,10 @@ public class Notifications extends AppCompatActivity {
     public void addTableRow(View view){
         TableLayout table = (TableLayout) findViewById(R.id.tableLayout);
         table.removeViewAt(3);
+        navBarController();
     }
+
 }
+
+
+
