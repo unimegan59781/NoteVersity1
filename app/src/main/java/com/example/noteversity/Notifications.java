@@ -62,9 +62,9 @@ public class Notifications extends AppCompatActivity {
         UserIDs.add("Fred Harper Morgan Christie-Cooper");
         UserIDs.add("Chris");
         UserIDs.add("Jack");
-        Notis.add(new Notification(1,"Folder 1",2,3,true));
-        Notis.add(new Notification(2,"Folder 1",2,4));
-        Notis.add(new Notification(3,"Folder 3",4,3,true));
+        Notis.add(new Notification(1,"Folder 1",2,3,1,true));
+        Notis.add(new Notification(2,"Folder 1",2,4,1));
+        Notis.add(new Notification(3,"Folder 3",4,3,3,true));
         /*openButton = (Button) findViewById(R.id.btnOpen);
         openButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,19 +83,21 @@ public class Notifications extends AppCompatActivity {
         public int senderID;
         public int recipientID;
         public Boolean invite;
-        public Notification(int notiID,String folderN,int senderID,int recipientID,Boolean invite){
+        public Notification(int notiID,String folderN,int senderID,int recipientID,int folderID,Boolean invite){
            this.notiID = notiID;
            this.senderID = senderID;
            this.recipientID = recipientID;
+           this.folderID = folderID;
            this.folderName = folderN;
            if (invite==null){invite=false;}
             else this.invite = invite;
         }
 
-        public Notification(int notiID,String folderN,int senderID,int recipientID){
+        public Notification(int notiID,String folderN,int senderID,int recipientID,int folderID){
             this.notiID = notiID;
             this.senderID = senderID;
             this.recipientID = recipientID;
+            this.folderID = folderID;
             this.folderName = folderN;
             this.invite = false;
         }

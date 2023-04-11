@@ -29,6 +29,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.execSQL(DbModels.CREATEFOLDERS);
                 db.execSQL(DbModels.CREATENOTES);
                 db.execSQL(DbModels.CREATEUFLINK);
+                db.execSQL(DbModels.CREATENOTIFICATIONS);
         }
 
         public void insertUser(String email, String username, String password) {
@@ -101,6 +102,21 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.insert(DbModels.tableList.get(2), null, contentValue); // null for auto filling id
         }
 
+        public void insertNotification(int notiID, int senderID, int recipientID, int folderID, String folderName, boolean invite) {
+
+                ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
+
+                contentValue.put(DbModels.NF_ID, notiID);
+                contentValue.put(DbModels.FOLDER_ID, folderID);
+                contentValue.put(DbModels.RECIPIENT_ID, recipientID);
+                contentValue.put(DbModels.SENDER_ID, senderID);
+                contentValue.put(DbModels.FOLDER_NAME, folderName);
+                contentValue.put(DbModels.INVITE, invite);
+                contentValue.put(DbModels.TIMEDATE, String.valueOf(LocalDate.now())); // date as YYYY-MM-DD for now
+
+                db.insert(DbModels.tableList.get(4), null, contentValue); // null for auto filling id
+         }
+         
         public List<String> getUser(int uID){ // gets folder with given id from raw query
                 c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.U_ID + "=" + uID + "", null );
                 c.moveToFirst();
@@ -203,7 +219,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.execSQL("DROP TABLE IF EXISTS " + "FOLDERS");
                 db.execSQL("DROP TABLE IF EXISTS " + "NOTES");
                 db.execSQL("DROP TABLE IF EXISTS " + "UFLINK");
-
+                db.execSQL("DROP TABLE IF EXISTS " + "NOTIFICATIONS");
                 onCreate(db);
         }
 
