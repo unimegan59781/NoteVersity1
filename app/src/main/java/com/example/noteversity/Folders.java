@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -138,10 +139,14 @@ public class Folders extends AppCompatActivity {
                     //folderView.setBackgroundColor(Color.BLUE);
                     //startActivity(new Intent(Folders.this, NotesPages.class));
                     List<String> folder = dbHandler.getFolder(folderName);
-                    String folderID = folder.get(0);
-                    Intent i = new Intent(Folders.this, NotesPages.class);
-                    i.putExtra("F_ID", folderID);// key is used to get value in Second Activiy
-                    startActivity(i);
+                    int folderID = Integer.parseInt(folder.get(0));
+
+
+                    Intent intent = new Intent(Folders.this, NotesPages.class);
+                    intent.putExtra("folderID", folderID);
+                    Log.d("Folder folder page", String.valueOf(folderID));
+                    startActivity(intent);
+
                     // TO GO TO VIEW
                     return super.onSingleTapConfirmed(e);
                 }
@@ -179,7 +184,10 @@ public class Folders extends AppCompatActivity {
                 folder.addView(newFolder);
                 folderInteractions(newFolder, folder);
             }
+        } else {
+            Toast.makeText(getApplicationContext(), "NEW ACCOUNT", Toast.LENGTH_LONG).show(); // test message
         }
+
     }
 
 }

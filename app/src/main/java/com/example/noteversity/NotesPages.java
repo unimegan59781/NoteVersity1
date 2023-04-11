@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -43,8 +44,10 @@ public class NotesPages extends AppCompatActivity {
 
         dbHandler = new DbHandler(NotesPages.this);
 
-        Intent intent = getIntent();
-        int folderID = Integer.parseInt(intent.getStringExtra("F_ID"));
+        int folderID = getIntent().getIntExtra("folderID", 0);
+
+        Log.d("Folder get n pages", String.valueOf(folderID));
+
         GridLayout grid = (GridLayout) findViewById(R.id.grid);
         List<String> allNotes = dbHandler.getFolderNotes(folderID);//Arrays.asList("dog", "cat");
         if (allNotes != null){
@@ -52,17 +55,20 @@ public class NotesPages extends AppCompatActivity {
                 String noteIMG = dbHandler.getNoteImg(name);
                 AppCompatButton newNote = createNote(name, noteIMG);
                 grid.addView(newNote);
-                noteInteractions(newNote, grid);
+                noteInteractions(newNote, grid, folderID);
             }
         } else {
-            // TO DO ERROR CHECK
+            // help
         }
 
 
         createNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(NotesPages.this, NoteCreation.class));
+                Intent intent = new Intent(NotesPages.this, NoteCreation.class);
+                intent.putExtra("folderID", folderID);
+                Log.d("Folder send note page", String.valueOf(folderID));
+                startActivity(intent);
             }
         });
 
@@ -75,7 +81,7 @@ public class NotesPages extends AppCompatActivity {
 
     };
 
-    public void noteInteractions(AppCompatButton note, GridLayout grid) {
+    public void noteInteractions(AppCompatButton note, GridLayout grid, int fID) {
         View noteView = getNote(note.getText().toString(), grid); // uses get function to find view of the folder from grid layout
         String noteName = note.getText().toString();
         noteView.setOnTouchListener(new View.OnTouchListener() {
@@ -113,10 +119,12 @@ public class NotesPages extends AppCompatActivity {
                     noteView.setBackgroundColor(Color.BLUE);
                     // TO GO TO VIEW
                     String noteIMG = dbHandler.getNoteImg(noteName);
-                    Intent i = new Intent(NotesPages.this, NoteCreation.class);
-                    i.putExtra("noteIMG", noteIMG);// key is used to get value in Second Activiy
-                    i.putExtra("previousNote", true);
-                    startActivity(i);
+                    Intent intent = new Intent(NotesPages.this, NoteCreation.class);
+                    intent.putExtra("noteIMG", noteIMG);// key is used to get value in Second Activiy
+                    intent.putExtra("previousNote", true);
+                    intent.putExtra("folderID", fID);
+                    Log.d("Folder send note page", String.valueOf(fID));
+                    startActivity(intent);
 
                     return super.onSingleTapConfirmed(e);
                 }

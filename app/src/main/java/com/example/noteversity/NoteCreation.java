@@ -32,7 +32,8 @@ public class NoteCreation extends AppCompatActivity {
         Intent intent = getIntent();
         String dbIMG = intent.getStringExtra("noteIMG");
         Boolean oldNote = intent.getBooleanExtra("previousNote", false);
-        Log.d("NoteCreation", String.valueOf(oldNote));
+        int folderID = getIntent().getIntExtra("folderID", 0);
+        Log.d("Folder get creation page", String.valueOf(folderID));
 
 
         Draw note = new Draw(this); // creates new isntace of draw class so user can create note
@@ -60,36 +61,38 @@ public class NoteCreation extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "SAVED BUTTON CLICKED", Toast.LENGTH_LONG).show(); // test message
 
-                byte[] byteIMG = saveScreen(noteView);
-                String strIMG = Base64.encodeToString(byteIMG, Base64.DEFAULT);
-
-                Log.d("NoteCreation", "byteIMG contents: " + Arrays.toString(byteIMG));
+                byte[] byteIMG = saveScreen(noteView); // get byte array of view
+                String byteStingIMG = Base64.encodeToString(byteIMG, Base64.DEFAULT); // set to string to save in db
 
                 note.clean();
-                //
+                dbHandler.insertNotes(1, folderID, "please", byteStingIMG); //inserts into db
 
-                dbHandler.insertNotes(1, 2, "pleasee", strIMG); //inserts into db
-                startActivity(new Intent(NoteCreation.this, NotesPages.class));
+                Intent intent = new Intent(NoteCreation.this, NotesPages.class);
+                intent.putExtra("folderID", folderID);// key is used to get value in Second Activiy
+                Log.d("Folder send cteation", String.valueOf(folderID));
+                startActivity(intent);
+
+
             }
         });//
 
     }
     //  Functions that validates the note title fits within 0 - 16 characters
 
-    public byte[] saveScreen(View noteView) {
-        Bitmap bitmapX = Bitmap.createBitmap(noteView.getWidth(), noteView.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmapX);
-        noteView.draw(canvas);
+    public byte[] saveScreen(View noteView) { // saves state of screen to bitmap to save as byte for db
+        Bitmap bitmapIMG = Bitmap.createBitmap(noteView.getWidth(), noteView.getHeight(), Bitmap.Config.ARGB_8888); // creates bitmap from view
+        Canvas canvas = new Canvas(bitmapIMG); // sets as canvas
+        noteView.draw(canvas); // adds to view draw
 
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmapX.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-        byte[] byteArray = outputStream.toByteArray();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); // sets output stream for future use
+        bitmapIMG.compress(Bitmap.CompressFormat.PNG, 100, outputStream); // compress to save
+        byte[] byteIMG = outputStream.toByteArray(); // turn to saveable byte[]
 
-        return byteArray;
+        return byteIMG;
     }
 
     public Bitmap getScreen(byte[] byteArray){
-        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length); // turns byte[] to bitmap
         return bitmap;
     }
 
