@@ -151,13 +151,12 @@ public class DbHandler extends SQLiteOpenHelper {
                 return folderName;
         }
          
-        public List<String> getUser(int uID){ // gets folder with given id from raw query
+        public List<String> getUser(int uID){
                 c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.U_ID + "=" + uID + "", null );
                 c.moveToFirst();
                 if (c == null) {
                         return null;
                 }
-
                 String userID = c.getString(0);
                 String email = c.getString(1);
                 String username = c.getString(2);
