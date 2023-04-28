@@ -6,11 +6,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
+
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.List;
+
 public class Profile extends AppCompatActivity {
+
+    private DbHandler dbHandler; // imports db handler //// here
+ // here // links db handler to class and with variable dbHandler to call later
+
+
+    public void setUsernameEmail(){
+        dbHandler = new DbHandler(Profile.this);
+        List<String> userInfo = dbHandler.getUser(1);
+
+        TextView username = findViewById(R.id.usernameTV);
+        username.setText(userInfo.get(2));
+
+        TextView email = findViewById(R.id.emailTV);
+        email.setText(userInfo.get(1));
+
+
+    }
 
     public void navBarController(){
         BottomNavigationView bottomBar = findViewById(R.id.bottomBar);
@@ -42,6 +63,8 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
         navBarController();
+        dbHandler = new DbHandler(Profile.this);
+        setUsernameEmail();
 
     }
 }
