@@ -116,6 +116,40 @@ public class DbHandler extends SQLiteOpenHelper {
 
                 db.insert(DbModels.tableList.get(4), null, contentValue); // null for auto filling id
          }
+
+        public String searchUser(String userName){ // gets folder with given id from raw query
+                c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.USERNAME + "=?", new String[]{userName});
+                c.moveToFirst();
+                if (c == null) {
+                        return null;
+                }
+                String userID = c.getString(0);
+                c.close();
+
+                return userID;
+        }
+
+        public String searchNote(String name){ // gets folder with given id from raw query
+                c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.NAME + "=?", new String[]{name});
+                c.moveToFirst();
+                if (c == null) {
+                        return null;
+                }
+                String note = c.getString(3);
+                c.close();
+                return note;
+        }
+
+        public String searchFolder(String name){ // gets folder with given id from raw query
+                c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.FOLDER + "=?", new String[]{name});
+                c.moveToFirst();
+                if (c == null) {
+                        return null;
+                }
+                String folderName = c.getString(2);
+                c.close();
+                return folderName;
+        }
          
         public List<String> getUser(int uID){ // gets folder with given id from raw query
                 c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.U_ID + "=" + uID + "", null );
