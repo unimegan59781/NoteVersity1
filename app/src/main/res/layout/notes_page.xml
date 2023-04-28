@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0d10b8"
+    android:background="@color/white"
     tools:context=".NotesPages">
 
     <RelativeLayout
@@ -93,8 +93,19 @@
         app:layout_constraintBottom_toTopOf="@id/bottomBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@android:color/white">
-
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+    <ImageButton
+        android:id="@+id/searchUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:backgroundTint="@color/purple_500"
+        android:contentDescription="Back Button"
+        android:src="@drawable/person_icon"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="#000000" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomBar"

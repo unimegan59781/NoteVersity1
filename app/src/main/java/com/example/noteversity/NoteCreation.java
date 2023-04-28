@@ -23,7 +23,7 @@ import java.util.Arrays;
 
 public class NoteCreation extends AppCompatActivity {
 
-    private DbHandler dbHandler; // imports db handler
+    private DbHandler dbHandler; // imports db handler //// here
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,7 @@ public class NoteCreation extends AppCompatActivity {
 
         Draw note = new Draw(this); // creates new isntace of draw class so user can create note
 
-        dbHandler = new DbHandler(NoteCreation.this); // links db handler to class and with variable dbHandler to call later
+        dbHandler = new DbHandler(NoteCreation.this); // here // links db handler to class and with variable dbHandler to call later
 
         EditText titleName = findViewById(R.id.noteTitle);
         String title = titleName.getText().toString();
@@ -67,32 +67,37 @@ public class NoteCreation extends AppCompatActivity {
 
                 EditText titleName = findViewById(R.id.noteTitle);
                 String title = titleName.getText().toString();
-                checkTitle(title);
+                //String name = checkNoteTitle(title);
+
+                // TO DO CHECK ERROR
 
                 byte[] byteIMG = saveScreen(noteView); // get byte array of view
                 String byteStingIMG = Base64.encodeToString(byteIMG, Base64.DEFAULT); // set to string to save in db
 
                 note.clean();
-                dbHandler.insertNotes(1, folderID, "please", byteStingIMG); //inserts into db
+                dbHandler.insertNotes(1, folderID, title, byteStingIMG); //inserts into db // here
 
                 Intent intent = new Intent(NoteCreation.this, NotesPages.class);
                 intent.putExtra("folderID", folderID);// key is used to get value in Second Activiy
                 Log.d("Folder send cteation", String.valueOf(folderID));
                 startActivity(intent);
-
-
             }
+
         });//
 
     }
-    
-    public String checkTitle(String title) {
-        if (title == "New Note") {
-            Toast.makeText(getApplicationContext(),"Please enter a title", Toast.LENGTH_LONG).show();
+
+    public String checkNoteTitle(String title) {
+        String nameLookUp = dbHandler.searchNote(title);
+        if (title.length() == 0) {
+            return "Please enter a title";
+        } else if (title.length() > 16) {
+            return "Please keep your title to less then 32 characters";
+        } else if (nameLookUp != null) {
+            return "Please keep your title to less then 32 characters";
         } else {
-            checkNoteTitle(title);
+            return title;
         }
-        return "Title is good";
     }
 
     public byte[] saveScreen(View noteView) { // saves state of screen to bitmap to save as byte for db
@@ -113,13 +118,4 @@ public class NoteCreation extends AppCompatActivity {
     }
     
     //  Functions that validates the note title fits within 0 - 16 characters
-    public static String checkNoteTitle(String title) {
-        if (title.length() == 0) {
-            return "Please enter a title";
-        } else if (title.length() > 16) {
-            return "Please keep your title to less then 32 characters";
-        } else {
-            return "Title is acceptable";
-        }
-    }
 }

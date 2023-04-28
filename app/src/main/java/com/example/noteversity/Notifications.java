@@ -57,6 +57,7 @@ public class Notifications extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notifications);
+        navBarController();
         UserIDs.add("Henry");
         UserIDs.add("Josh");
         UserIDs.add("Fred Harper Morgan Christie-Cooper");

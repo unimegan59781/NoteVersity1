@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Folders extends AppCompatActivity {
@@ -42,7 +43,7 @@ public class Folders extends AppCompatActivity {
     public String nameFolder (){ // function to name folder + name validation //REUSE NOTES
         EditText name = (EditText) findViewById(R.id.folderNameEdit);
         String title = name.getText().toString();
-//        List<String> nameLookUp = dbHandler.getFolder(title);
+        //String nameLookUp = dbHandler.searchFolder(title);
 //        if (title.length() == 0) {
 //            return "Please enter a title";
 //        } else if (title.length() > 32) {
@@ -56,6 +57,7 @@ public class Folders extends AppCompatActivity {
         name.setText("");
         return title;
     }
+
 
     public AppCompatButton createFolder(String folderName){
         AppCompatButton newFolder = new AppCompatButton(this);
@@ -134,6 +136,9 @@ public class Folders extends AppCompatActivity {
                 @Override // double tap to edit name
                 public boolean onDoubleTap(MotionEvent e) {
                     folderView.setBackgroundColor(Color.YELLOW);
+
+                    //addUser("megan200", folderName);
+
                     //Log.d("Folder", folderID); // logcat test prove valid folderID
                     // TO CHNAGE FOLDER NAME
                     return super.onDoubleTap(e); // passes event as super to overide touch
@@ -163,8 +168,6 @@ public class Folders extends AppCompatActivity {
                 return true;
             }
         });
-        newFolder.setPadding(DPtoPixels(getApplicationContext(), 15), 0, 0, 0);
-        grid.addView(newFolder);
     }
 
     public void navBarController(){
@@ -194,11 +197,15 @@ public class Folders extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.folders);
+
         BottomNavigationView navBar = findViewById(R.id.bottomBar);
         navBar.setSelectedItemId(R.id.homeButton);
         dbHandler = new DbHandler(Folders.this);
 
-        //add a functino to query folders from database
+//        dbHandler.insertUser("up1@myport.ac.uk", "megan100", "password");
+//        dbHandler.insertUser("up2@myport.ac.uk", "megan200", "password");
+//        dbHandler.insertUser("up3@myport.ac.uk", "megan300", "password");
+
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
         List<String> allFolderNames = dbHandler.getAllFolders(1);
         if (allFolderNames != null){
@@ -210,17 +217,15 @@ public class Folders extends AppCompatActivity {
         navBarController();
         System.out.println("onCreate");
 
-    }
+    }}}
 
-    //  Functions that validates the folder title fits within 0 - 32 characters
-    public static String checkFolderTitle(String[] title) {
-        if (title.length == 0) {
-            return "Please enter a title";
-        } else if (title.length > 32) {
-            return "Please keep your title to less then 32 characters";
-        } else {
-            Toast.makeText(getApplicationContext(), "NEW ACCOUNT", Toast.LENGTH_LONG).show(); // test message
-        }
-    }
-
-}
+//    //  Functions that validates the folder title fits within 0 - 32 characters
+//    public static String checkFolderTitle(String[] title) {
+//        if (title.length == 0) {
+//            return "Please enter a title";
+//        } else if (title.length > 32) {
+//            return "Please keep your title to less then 32 characters";
+//        } else {
+//            Toast.makeText(getApplicationContext(), "NEW ACCOUNT", Toast.LENGTH_LONG).show(); // test message
+//        }
+//    }
