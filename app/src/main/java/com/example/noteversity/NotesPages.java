@@ -41,6 +41,7 @@ public class NotesPages extends AppCompatActivity {
         setContentView(R.layout.notes_page);
         FloatingActionButton createNoteButton = findViewById(R.id.newNoteBtn);
         ImageButton backButton = findViewById(R.id.backButton);
+        ImageButton searchButton = findViewById(R.id.searchUser);
 
         dbHandler = new DbHandler(NotesPages.this);
 
@@ -79,7 +80,23 @@ public class NotesPages extends AppCompatActivity {
             }
         });
 
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //addUser("megan200", 1);
+            }});
+
     };
+
+    public void addUser(String userName, int folderID){
+        String userID = dbHandler.searchUser(userName);
+        if (userID == null){
+            Log.d("Folder", "erorrrrrrrrrrrrrrrrrr");
+        } else {
+            Log.d("Folder insert", userID);
+            //dbHandler.insertFolder(Integer.parseInt(userID), folderName);
+        }
+    }
 
     public void noteInteractions(AppCompatButton note, GridLayout grid, int fID) {
         View noteView = getNote(note.getText().toString(), grid); // uses get function to find view of the folder from grid layout

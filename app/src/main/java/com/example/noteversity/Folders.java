@@ -43,7 +43,7 @@ public class Folders extends AppCompatActivity {
     public String nameFolder (){ // function to name folder + name validation //REUSE NOTES
         EditText name = (EditText) findViewById(R.id.folderNameEdit);
         String title = name.getText().toString();
-        String nameLookUp = dbHandler.searchFolder(title);
+        //String nameLookUp = dbHandler.searchFolder(title);
 //        if (title.length() == 0) {
 //            return "Please enter a title";
 //        } else if (title.length() > 32) {
@@ -56,17 +56,6 @@ public class Folders extends AppCompatActivity {
 //        }
         name.setText("");
         return title;
-    }
-
-    public void addUser(String userName, String folderName){
-        String userID = dbHandler.searchUser(userName);
-        if (userID == null){
-            Log.d("Folder", "erorrrrrrrrrrrrrrrrrr");
-        } else {
-            Log.d("Folder insert", userID);
-            dbHandler.insertFolder(Integer.parseInt(userID), folderName);
-        }
-
     }
 
 
@@ -148,7 +137,7 @@ public class Folders extends AppCompatActivity {
                 public boolean onDoubleTap(MotionEvent e) {
                     folderView.setBackgroundColor(Color.YELLOW);
 
-                    addUser("megan200", folderName);
+                    //addUser("megan200", folderName);
 
                     //Log.d("Folder", folderID); // logcat test prove valid folderID
                     // TO CHNAGE FOLDER NAME
@@ -208,6 +197,7 @@ public class Folders extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.folders);
+
         BottomNavigationView navBar = findViewById(R.id.bottomBar);
         navBar.setSelectedItemId(R.id.homeButton);
         dbHandler = new DbHandler(Folders.this);

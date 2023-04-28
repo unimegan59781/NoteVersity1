@@ -67,7 +67,7 @@ public class NoteCreation extends AppCompatActivity {
 
                 EditText titleName = findViewById(R.id.noteTitle);
                 String title = titleName.getText().toString();
-                String name = checkNoteTitle(title);
+                //String name = checkNoteTitle(title);
 
                 // TO DO CHECK ERROR
 
@@ -75,14 +75,12 @@ public class NoteCreation extends AppCompatActivity {
                 String byteStingIMG = Base64.encodeToString(byteIMG, Base64.DEFAULT); // set to string to save in db
 
                 note.clean();
-                dbHandler.insertNotes(1, folderID, name, byteStingIMG); //inserts into db
+                dbHandler.insertNotes(1, folderID, title, byteStingIMG); //inserts into db
 
                 Intent intent = new Intent(NoteCreation.this, NotesPages.class);
                 intent.putExtra("folderID", folderID);// key is used to get value in Second Activiy
                 Log.d("Folder send cteation", String.valueOf(folderID));
                 startActivity(intent);
-
-
             }
 
         });//
