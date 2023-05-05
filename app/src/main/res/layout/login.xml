@@ -73,7 +73,10 @@
       android:text="LOGIN"
       app:layout_constraintLeft_toLeftOf="parent"
       app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/password" />
+      app:layout_constraintTop_toBottomOf="@id/password"
+      android:autoLink="web"
+      android:linksClickable="true"
+      android:textColorLink="@color/design_default_color_primary" />
 
   <TextView
       android:id="@+id/forgotpass"

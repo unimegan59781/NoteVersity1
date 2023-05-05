@@ -27,6 +27,9 @@ public class DbModels { // TO COMMENT
     public static final String NAME = "noteName";
     public static final String NOTEIMG = "noteImg";
 
+    // NOTES TABLE
+    public static final String UF_ID = "ufID";
+
     // NOTIFICATIONS TABLE
     public static final String NF_ID = "notificationID";
     public static final String SENDER_ID  = "senderID";
@@ -55,7 +58,8 @@ public class DbModels { // TO COMMENT
             + TIMEDATE  + " NOT NULL);";
 
     public static String CREATEUFLINK = "create table " + tableList.get(3)
-            + "(" + F_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + "(" + UF_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + F_ID + " INTEGER NOT NULL, "
             + U_ID + " INTEGER NOT NULL);";
 
     public static String CREATENOTIFICATIONS = "create table " + tableList.get(4)

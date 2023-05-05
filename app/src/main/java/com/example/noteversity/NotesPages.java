@@ -46,6 +46,7 @@ public class NotesPages extends AppCompatActivity {
         dbHandler = new DbHandler(NotesPages.this);
 
         int folderID = getIntent().getIntExtra("folderID", 0);
+        int userID = 0;
 
         Log.d("Folder get n pages", String.valueOf(folderID));
 
@@ -68,7 +69,7 @@ public class NotesPages extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(NotesPages.this, NoteCreation.class);
                 intent.putExtra("folderID", folderID);
-                Log.d("Folder send note page", String.valueOf(folderID));
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }
         });
@@ -83,20 +84,12 @@ public class NotesPages extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //addUser("megan200", 1);
+                Intent intent = new Intent(NotesPages.this, SearchUser.class);
+                intent.putExtra("folderID", folderID);
+                startActivity(intent);
             }});
 
     };
-
-    public void addUser(String userName, int folderID){
-        String userID = dbHandler.searchUser(userName);
-        if (userID == null){
-            Log.d("Folder", "erorrrrrrrrrrrrrrrrrr");
-        } else {
-            Log.d("Folder insert", userID);
-            //dbHandler.insertFolder(Integer.parseInt(userID), folderName);
-        }
-    }
 
     public void noteInteractions(AppCompatButton note, GridLayout grid, int fID) {
         View noteView = getNote(note.getText().toString(), grid); // uses get function to find view of the folder from grid layout

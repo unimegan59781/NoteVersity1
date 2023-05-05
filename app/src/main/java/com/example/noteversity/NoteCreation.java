@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -19,11 +20,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class NoteCreation extends AppCompatActivity {
 
     private DbHandler dbHandler; // imports db handler //// here
+    private int click = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,7 @@ public class NoteCreation extends AppCompatActivity {
         Intent intent = getIntent();
         String dbIMG = intent.getStringExtra("noteIMG");
         Boolean oldNote = intent.getBooleanExtra("previousNote", false);
-        int folderID = getIntent().getIntExtra("folderID", 0);
+        int folderID = intent.getIntExtra("folderID", 0);
         Log.d("Folder get creation page", String.valueOf(folderID));
 
 
@@ -43,9 +47,9 @@ public class NoteCreation extends AppCompatActivity {
 
         EditText titleName = findViewById(R.id.noteTitle);
         String title = titleName.getText().toString();
-        titleName.setText("New Note");
 
         ImageButton saveBut = (ImageButton) findViewById(R.id.newNoteBtn); // save button link
+        Button changeButton = findViewById(R.id.backgroundButton);
 
         RelativeLayout noteView = (RelativeLayout) findViewById(R.id.content); // create view that draw can be implemented on
          // links draw class for user to write on screen and see buttons
@@ -54,11 +58,31 @@ public class NoteCreation extends AppCompatActivity {
 
             Bitmap bitmapIMG = getScreen(byteIMG);
             noteView.setBackground(new BitmapDrawable(getResources(), bitmapIMG));
-
             noteView.addView(note);
+
+            changeButton.setVisibility(View.INVISIBLE);
+
         } else {
             noteView.addView(note);
+            noteView.setBackground(getDrawable(R.drawable.cream_background));
+
+            changeButton.setVisibility(View.VISIBLE);
         }
+
+        changeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Integer> backgrounds = Arrays.asList(R.drawable.blue_background, R.drawable.lined_background, R.drawable.square_background, R.drawable.cream_background);
+
+                if (click < 3) {
+                    click++;
+                } else {
+                    click = 0;
+                }
+                noteView.setBackground(getDrawable(backgrounds.get(click)));
+
+            }
+        });
 
         saveBut.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -32,6 +32,23 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.execSQL(DbModels.CREATENOTIFICATIONS);
         }
 
+        public void insertUFlink(int uID, int fID) {
+
+                ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
+
+                contentValue.put(DbModels.F_ID, fID);
+                contentValue.put(DbModels.U_ID, uID);
+
+                db.insert(DbModels.tableList.get(3), null, contentValue); // null for filling the id
+        }
+
+        public void deleteUFlink(int ufID){
+                db.delete(DbModels.tableList.get(2), DbModels.NAME + "=?", null);
+        }
+
+
+
+
         public void insertUser(String email, String username, String password) {
 
                 ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
@@ -42,6 +59,7 @@ public class DbHandler extends SQLiteOpenHelper {
 
                 db.insert(DbModels.tableList.get(0), null, contentValue); // null for filling the id
         }
+
 
         public void insertFolder(int userID, String folderName) {
 
