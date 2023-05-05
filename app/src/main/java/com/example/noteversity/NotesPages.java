@@ -45,8 +45,9 @@ public class NotesPages extends AppCompatActivity {
 
         dbHandler = new DbHandler(NotesPages.this);
 
-        int folderID = getIntent().getIntExtra("folderID", 0);
-        int userID = 0;
+        Intent intent = getIntent();
+        int folderID = intent.getIntExtra("folderID", 0);
+        int userID = intent.getIntExtra("userID", 0);
 
         Log.d("Folder get n pages", String.valueOf(folderID));
 
@@ -57,7 +58,7 @@ public class NotesPages extends AppCompatActivity {
                 String noteIMG = dbHandler.getNoteImg(name);
                 AppCompatButton newNote = createNote(name, noteIMG);
                 grid.addView(newNote);
-                noteInteractions(newNote, grid, folderID);
+                noteInteractions(newNote, grid, folderID, userID);
             }
         } else {
             // help
@@ -86,12 +87,13 @@ public class NotesPages extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(NotesPages.this, SearchUser.class);
                 intent.putExtra("folderID", folderID);
+                intent.putExtra("userID", userID);
                 startActivity(intent);
             }});
 
     };
 
-    public void noteInteractions(AppCompatButton note, GridLayout grid, int fID) {
+    public void noteInteractions(AppCompatButton note, GridLayout grid, int fID, int userID) {
         View noteView = getNote(note.getText().toString(), grid); // uses get function to find view of the folder from grid layout
         String noteName = note.getText().toString();
         noteView.setOnTouchListener(new View.OnTouchListener() {
@@ -133,6 +135,7 @@ public class NotesPages extends AppCompatActivity {
                     intent.putExtra("noteIMG", noteIMG);// key is used to get value in Second Activiy
                     intent.putExtra("previousNote", true);
                     intent.putExtra("folderID", fID);
+                    intent.putExtra("userID", userID);
                     Log.d("Folder send note page", String.valueOf(fID));
                     startActivity(intent);
 

@@ -29,8 +29,8 @@ import java.util.List;
 public class Folders extends AppCompatActivity {
     private DbHandler dbHandler; // imports db handler
 
-    public int userID = 1;
-
+    Intent intent = getIntent();
+    public int userID = intent.getIntExtra("userID", 0);
 
     public android.content.Context cntx() {
         return getApplicationContext();
@@ -83,6 +83,7 @@ public class Folders extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     public void folderAdd(android.view.View view){
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
+
         String folderName = nameFolder();
         AppCompatButton newFolder = createFolder(folderName);
         folder.addView(newFolder);
@@ -156,9 +157,9 @@ public class Folders extends AppCompatActivity {
                     List<String> folder = dbHandler.getFolder(folderName);
                     int folderID = Integer.parseInt(folder.get(0));
 
-
                     Intent intent = new Intent(Folders.this, NotesPages.class);
                     intent.putExtra("folderID", folderID);
+                    intent.putExtra("userID", userID);
                     Log.d("Folder folder page", String.valueOf(folderID));
                     startActivity(intent);
 
@@ -203,13 +204,12 @@ public class Folders extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.folders);
 
+        Intent intent = getIntent();
+        int userID = intent.getIntExtra("userID", 0);
+
         BottomNavigationView navBar = findViewById(R.id.bottomBar);
         navBar.setSelectedItemId(R.id.homeButton);
         dbHandler = new DbHandler(Folders.this);
-
-//        dbHandler.insertUser("up1@myport.ac.uk", "megan100", "password");
-//        dbHandler.insertUser("up2@myport.ac.uk", "megan200", "password");
-//        dbHandler.insertUser("up3@myport.ac.uk", "megan300", "password");
 
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
         List<String> allFolderNames = dbHandler.getAllFolders(userID);
@@ -223,14 +223,3 @@ public class Folders extends AppCompatActivity {
         System.out.println("onCreate");
 
     }}}
-
-//    //  Functions that validates the folder title fits within 0 - 32 characters
-//    public static String checkFolderTitle(String[] title) {
-//        if (title.length == 0) {
-//            return "Please enter a title";
-//        } else if (title.length > 32) {
-//            return "Please keep your title to less then 32 characters";
-//        } else {
-//            Toast.makeText(getApplicationContext(), "NEW ACCOUNT", Toast.LENGTH_LONG).show(); // test message
-//        }
-//    }

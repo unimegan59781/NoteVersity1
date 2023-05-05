@@ -50,7 +50,7 @@ public class SearchUser extends AppCompatActivity {
 
                 dbHandler.insertUFlink(searchID, folderID);
 
-                // link notifications
+                // link notifications HENRY
 
                 Intent intent = new Intent(SearchUser.this, NotesPages.class);
                 intent.putExtra("folderID", folderID);
