@@ -38,6 +38,7 @@ public class NoteCreation extends AppCompatActivity {
         String dbIMG = intent.getStringExtra("noteIMG");
         Boolean oldNote = intent.getBooleanExtra("previousNote", false);
         int folderID = intent.getIntExtra("folderID", 0);
+        int userID = intent.getIntExtra("userID", 0);
         Log.d("Folder get creation page", String.valueOf(folderID));
 
 
@@ -99,7 +100,7 @@ public class NoteCreation extends AppCompatActivity {
                 String byteStingIMG = Base64.encodeToString(byteIMG, Base64.DEFAULT); // set to string to save in db
 
                 note.clean();
-                dbHandler.insertNotes(1, folderID, title, byteStingIMG); //inserts into db // here
+                dbHandler.insertNotes(userID, folderID, title, byteStingIMG); //inserts into db // here
 
                 Intent intent = new Intent(NoteCreation.this, NotesPages.class);
                 intent.putExtra("folderID", folderID);// key is used to get value in Second Activiy
