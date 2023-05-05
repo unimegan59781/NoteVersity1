@@ -17,10 +17,16 @@ android {
     }
 
     signingConfigs {
-        release {
-            storeFile file("C:/Users/invate/OneDrive/home/key/mykeystore")
+        debug {
+            storeFile file('C:\\Users\\invate\\OneDrive\\home\\key\\mykeystore.keystore')
             storePassword 'password123'
-            keyAlias 'mykeystore'
+            keyAlias 'myalias'
+            keyPassword 'password123'
+        }
+        release {
+            storeFile file("C:/Users/invate/OneDrive/home/key/mykeystore.keystore")
+            storePassword 'password123'
+            keyAlias 'myalias'
             keyPassword 'password123'
         }
     }

@@ -147,6 +147,22 @@ public class DbHandler extends SQLiteOpenHelper {
                 return userID;
         }
 
+        public String searchEmail(String email) {
+                // gets folder with given id from raw query
+                c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.EMAIL + "=?", new String[]{email});
+
+                // Check if cursor has any rows
+                if (c.getCount() == 0) {
+                        c.close();
+                        return null;
+                }
+
+                c.moveToFirst();
+                String userID = c.getString(0);
+                c.close();
+                return userID;
+        }
+
         public String searchNote(String name){ // gets folder with given id from raw query
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.NAME + "=?", new String[]{name});
                 c.moveToFirst();
