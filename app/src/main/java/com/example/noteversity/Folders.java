@@ -202,9 +202,9 @@ public class Folders extends AppCompatActivity {
         navBar.setSelectedItemId(R.id.homeButton);
         dbHandler = new DbHandler(Folders.this);
 
-//        dbHandler.insertUser("up1@myport.ac.uk", "megan100", "password");
-//        dbHandler.insertUser("up2@myport.ac.uk", "megan200", "password");
-//        dbHandler.insertUser("up3@myport.ac.uk", "megan300", "password");
+       dbHandler.insertUser("up1@myport.ac.uk", "megan100", "password");
+       dbHandler.insertUser("up2@myport.ac.uk", "megan200", "password");
+      dbHandler.insertUser("up3@myport.ac.uk", "megan300", "password");
 
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
         List<String> allFolderNames = dbHandler.getAllFolders(1);

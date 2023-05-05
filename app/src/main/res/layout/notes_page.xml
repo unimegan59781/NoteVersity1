@@ -54,17 +54,20 @@
             android:columnCount="1"
             android:rowCount="2">
             <RelativeLayout>
+
                 <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
                     android:layout_columnWeight="1"
                     android:layout_gravity="fill"
-                    android:layout_margin="3dp"
-                    android:layout_marginBottom="6dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginBottom="3dp"
                     android:background="@drawable/folder_view"
                     android:gravity="start|center_vertical"
                     android:paddingStart="15dp"
-                    android:text="Folder 3"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"/>
+                    android:text="Folder 3" />
             </RelativeLayout>
         </GridLayout>
     </ScrollView>
