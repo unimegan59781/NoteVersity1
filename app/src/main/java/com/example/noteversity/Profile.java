@@ -2,6 +2,7 @@ package com.example.noteversity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import java.util.List;
 
 public class Profile extends AppCompatActivity {
+
 
     private DbHandler dbHandler; // imports db handler //// here
  // here // links db handler to class and with variable dbHandler to call later
@@ -58,12 +60,19 @@ public class Profile extends AppCompatActivity {
         });
     }
 
+    public void changeUsername(){
+        dbHandler = new DbHandler(Profile.this);
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
         navBarController();
-        dbHandler = new DbHandler(Profile.this);
+        AppCompatButton changeButton = findViewById(R.id.changeUsername);
+        changeButton.setOnClickListener(view -> changeUsername());
+
         setUsernameEmail();
 
     }
