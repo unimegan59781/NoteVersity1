@@ -23,14 +23,14 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Folders extends AppCompatActivity {
     private DbHandler dbHandler; // imports db handler
 
-    Intent intent = getIntent();
-    public int userID = intent.getIntExtra("userID", 0);
+    public int userID = 0;
 
     public android.content.Context cntx() {
         return getApplicationContext();
@@ -42,7 +42,7 @@ public class Folders extends AppCompatActivity {
         return pixels;
     }
 
-    public String nameFolder (){ // function to name folder + name validation //REUSE NOTES
+    public String nameFolder() { // function to name folder + name validation //REUSE NOTES
         EditText name = (EditText) findViewById(R.id.folderNameEdit);
         String title = name.getText().toString();
         //String nameLookUp = dbHandler.searchFolder(title);
@@ -61,27 +61,27 @@ public class Folders extends AppCompatActivity {
     }
 
 
-    public AppCompatButton createFolder(String folderName){
+    public AppCompatButton createFolder(String folderName) {
         AppCompatButton newFolder = new AppCompatButton(this);
         GridLayout.LayoutParams params = new GridLayout.LayoutParams(GridLayout.spec(
-                GridLayout.UNDEFINED,GridLayout.FILL,1f),
-                GridLayout.spec(GridLayout.UNDEFINED,GridLayout.FILL,1f));
+                GridLayout.UNDEFINED, GridLayout.FILL, 1f),
+                GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f));
 
 
-        params.setMargins(DPtoPixels(cntx(),3),DPtoPixels(cntx(),3),DPtoPixels(cntx(),3),DPtoPixels(cntx(),6));
+        params.setMargins(DPtoPixels(cntx(), 3), DPtoPixels(cntx(), 3), DPtoPixels(cntx(), 3), DPtoPixels(cntx(), 6));
         newFolder.setLayoutParams(params);
         newFolder.setBackgroundResource(R.drawable.folder_view);
         newFolder.setText(folderName); // use will name function
         newFolder.setGravity(Gravity.START);
         newFolder.setGravity(Gravity.CENTER_VERTICAL);
-        newFolder.setPadding(DPtoPixels(getApplicationContext(),15),0,0,0);
+        newFolder.setPadding(DPtoPixels(getApplicationContext(), 15), 0, 0, 0);
         return newFolder;
 
     }
 
 
     @SuppressLint("ClickableViewAccessibility")
-    public void folderAdd(android.view.View view){
+    public void folderAdd(android.view.View view) {
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
 
         String folderName = nameFolder();
@@ -93,14 +93,14 @@ public class Folders extends AppCompatActivity {
         int fID = Integer.parseInt(folderList.get(0));
         dbHandler.insertUFlink(userID, fID);
 
-     }
+    }
 
     public View getFolder(String folderName, GridLayout folder) { // function that loops the views in folder grid layout to find location of view with desired name
-        for(int i = 0; i < folder.getChildCount(); i++) {
+        for (int i = 0; i < folder.getChildCount(); i++) {
             View folderLocation = folder.getChildAt(i);
-            if(folderLocation instanceof Button) { // itterates through folders in grid
+            if (folderLocation instanceof Button) { // itterates through folders in grid
                 Button gridFolder = (Button) folderLocation; // casts to appcompatbutton (button) to see if folder exisits
-                if(gridFolder.getText().toString().equals(folderName)) { // use name as unquie identifyer of view
+                if (gridFolder.getText().toString().equals(folderName)) { // use name as unquie identifyer of view
                     return folderLocation; // returns view of folderName
                 }
             }
@@ -112,9 +112,12 @@ public class Folders extends AppCompatActivity {
         folder.removeView(folderName); // removes view in grid layout folder with view thats be named
         dbHandler.deleteFolder(name);
         // TO ADD DB DELETE CODE
-    };
+    }
+
+    ;
+
     @SuppressLint("ClickableViewAccessibility")
-    public void folderInteractions(AppCompatButton newFolder, GridLayout folder){
+    public void folderInteractions(AppCompatButton newFolder, GridLayout folder) {
         View folderView = getFolder(newFolder.getText().toString(), folder); // uses get function to find view of the folder from grid layout
         String folderName = newFolder.getText().toString();
         newFolder.setOnTouchListener(new View.OnTouchListener() {
@@ -176,7 +179,7 @@ public class Folders extends AppCompatActivity {
         });
     }
 
-    public void navBarController(){
+    public void navBarController() {
         BottomNavigationView bottomBar = findViewById(R.id.bottomBar);
         bottomBar.setSelectedItemId(R.id.homeButton);
         bottomBar.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -199,27 +202,28 @@ public class Folders extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.folders);
-
-        Intent intent = getIntent();
-        int userID = intent.getIntExtra("userID", 0);
 
         BottomNavigationView navBar = findViewById(R.id.bottomBar);
         navBar.setSelectedItemId(R.id.homeButton);
         dbHandler = new DbHandler(Folders.this);
 
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
-        List<String> allFolderNames = dbHandler.getAllFolders(userID);
-        if (allFolderNames != null){
-            for (String name : allFolderNames) {
-                AppCompatButton newFolder = createFolder(name);
+        List<String> folderIDs = dbHandler.getUsersFolders(userID);
+        if (folderIDs != null) {
+            for (String id : folderIDs) {
+                int fID = Integer.parseInt(id);
+                String folderName = dbHandler.getFolderName(fID);
+                AppCompatButton newFolder = createFolder(folderName);
                 folder.addView(newFolder);
                 folderInteractions(newFolder, folder);
             }
+        }
         navBarController();
         System.out.println("onCreate");
-
-    }}}
+    }
+}

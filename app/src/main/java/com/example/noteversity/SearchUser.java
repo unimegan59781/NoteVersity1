@@ -13,6 +13,8 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.content.Intent;
+import android.widget.TextView;
+
 import java.util.List;
 
 public class SearchUser extends AppCompatActivity {
@@ -31,6 +33,20 @@ public class SearchUser extends AppCompatActivity {
 
         int folderID = getIntent().getIntExtra("folderID", 0);
         int userID = getIntent().getIntExtra("userID", 0);
+
+        List<String> usersIDs = dbHandler.getUsersInFolder(folderID);
+        String username = "";
+        if (usersIDs != null) {
+            for (String id : usersIDs) {
+                int fID = Integer.parseInt(id);
+                username = username + "\n" + dbHandler.getUserName(fID);
+            }
+        }
+
+        TextView displayView = findViewById(R.id.displayUsers);
+
+        displayView.setText("\n" + "\n" + "\n" +"megan100" + "\n" + "megan400"+ "\n" + "megan500");
+
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +73,6 @@ public class SearchUser extends AppCompatActivity {
                 intent.putExtra("userID", userID);
                 startActivity(intent);
             }});
-
     };
 
 }
