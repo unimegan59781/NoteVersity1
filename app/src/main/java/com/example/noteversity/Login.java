@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -71,7 +72,8 @@ public class Login extends AppCompatActivity {
                     navigateToSecondActivity();
                 }
             } catch (ApiException e) {
-                Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                Log.e("LOGIN_ERROR", "Error code: " + e.getStatusCode() + " Error message: " + e.getMessage());
+                Toast.makeText(getApplicationContext(), "Error during sign-in", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -34,8 +34,11 @@ public class SecondLoginActivity extends AppCompatActivity {
         signOutBtn = findViewById(R.id.signout);
 
         // this sets up the Google sign-in options and client
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).requestEmail().build();
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
         gsc = GoogleSignIn.getClient(this,gso);
+
 
         // this gets the last sign-in account and displays the name and email
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);

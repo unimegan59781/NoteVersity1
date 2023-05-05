@@ -29,6 +29,8 @@ import java.util.List;
 public class Folders extends AppCompatActivity {
     private DbHandler dbHandler; // imports db handler
 
+    public int userID = 1;
+
 
     public android.content.Context cntx() {
         return getApplicationContext();
@@ -85,7 +87,10 @@ public class Folders extends AppCompatActivity {
         AppCompatButton newFolder = createFolder(folderName);
         folder.addView(newFolder);
         folderInteractions(newFolder, folder);
-        dbHandler.insertFolder(1, newFolder.getText().toString()); // inserts new folder into db folders table
+        dbHandler.insertFolder(userID, folderName); // inserts new folder into db folders table
+        List<String> folderList = dbHandler.getFolder(folderName);
+        int fID = Integer.parseInt(folderList.get(0));
+        dbHandler.insertUFlink(userID, fID);
 
      }
 
@@ -207,7 +212,7 @@ public class Folders extends AppCompatActivity {
 //        dbHandler.insertUser("up3@myport.ac.uk", "megan300", "password");
 
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
-        List<String> allFolderNames = dbHandler.getAllFolders(1);
+        List<String> allFolderNames = dbHandler.getAllFolders(userID);
         if (allFolderNames != null){
             for (String name : allFolderNames) {
                 AppCompatButton newFolder = createFolder(name);
