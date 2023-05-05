@@ -109,7 +109,6 @@ public class NoteCreation extends AppCompatActivity {
             }
 
         });//
-
     }
 
     public String checkNoteTitle(String title) {

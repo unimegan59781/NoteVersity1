@@ -90,7 +90,6 @@ public class NotesPages extends AppCompatActivity {
                 intent.putExtra("userID", userID);
                 startActivity(intent);
             }});
-
     };
 
     public void noteInteractions(AppCompatButton note, GridLayout grid, int fID, int userID) {
