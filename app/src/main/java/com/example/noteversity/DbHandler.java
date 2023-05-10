@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DbHandler extends SQLiteOpenHelper {
 
-        static final int DB_VERSION = 1; // db version control
+        static final int DB_VERSION = 6; // db version control
 
         public DbHandler(Context context) { // Blank constructor
                 super(context, "NoteVersity.DB", null, DB_VERSION);
@@ -156,6 +156,13 @@ public class DbHandler extends SQLiteOpenHelper {
                 //db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.F_ID + "=" + folderID + "", null );
         }
 
+        public void deleteMe(String uID){
+                db.delete(DbModels.tableList.get(0), DbModels.U_ID + "=?", new String[]{uID});
+
+                //db.delete(DbModels.tableList.get(1), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete folder
+                //db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.F_ID + "=" + folderID + "", null );
+        }
+
         public void deleteNote(String noteName){
                 db.delete(DbModels.tableList.get(2), DbModels.NAME + "=?", new String[]{noteName});
 
@@ -228,14 +235,16 @@ public class DbHandler extends SQLiteOpenHelper {
 
         public String searchUser(String userName){ // gets folder with given id from raw query
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.USERNAME + "=?", new String[]{userName});
-                c.moveToFirst();
                 if (c == null) {
                         return null;
                 }
-                String userID = c.getString(0);
+                if (c.moveToFirst()) {
+                        String name = c.getString(1);
+                        c.close();
+                        return name;
+                }
                 c.close();
-
-                return userID;
+                return null;
         }
 
 
@@ -268,24 +277,31 @@ public class DbHandler extends SQLiteOpenHelper {
 
         public String searchNote(String name){ // gets folder with given id from raw query
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.NAME + "=?", new String[]{name});
-                c.moveToFirst();
                 if (c == null) {
                         return null;
                 }
-                String note = c.getString(3);
+                if (c.moveToFirst()) {
+                        String folderName = c.getString(2);
+                        c.close();
+                        return folderName;
+                }
                 c.close();
-                return note;
+                return null;
         }
 
-        public String searchFolder(String name){ // gets folder with given id from raw query
+        public String searchFolder(String name){
+                // gets folder with given name from raw query
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.FOLDER + "=?", new String[]{name});
-                c.moveToFirst();
                 if (c == null) {
                         return null;
                 }
-                String folderName = c.getString(2);
+                if (c.moveToFirst()) {
+                        String noteName = c.getString(3);
+                        c.close();
+                        return noteName;
+                }
                 c.close();
-                return folderName;
+                return null;
         }
          
         public List<String> getUser(int uID){
@@ -373,8 +389,18 @@ public class DbHandler extends SQLiteOpenHelper {
                 String sql = "UPDATE USERS SET username = " + "'"+username+"' " + "WHERE userID = " + uID;
                 System.out.println(sql);
                 db.execSQL(sql);
+        }
 
+        public void changeFoldername(String name, int fID){
+                String sql = "UPDATE FOLDERS SET folderName = " + "'"+name+"' " + "WHERE folderID = " + fID;
+                //System.out.println(sql);
+                db.execSQL(sql);
+        }
 
+        public void changeNoteName(String name, int nID){
+                String sql = "UPDATE NOTES SET noteName = " + "'"+name+"' " + "WHERE noteID = " + nID;
+                //System.out.println(sql);
+                db.execSQL(sql);
         }
 
         public List<String> getNote(int nID){ // gets note with given note id from raw query

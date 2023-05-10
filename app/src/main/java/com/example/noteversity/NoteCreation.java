@@ -88,11 +88,14 @@ public class NoteCreation extends AppCompatActivity {
         saveBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"SAVED BUTTON CLICKED", Toast.LENGTH_LONG).show(); // test message
 
                 EditText titleName = findViewById(R.id.noteTitle);
                 String title = titleName.getText().toString();
-                //String name = checkNoteTitle(title);
+                if (checkNoteTitle(title)){
+                    titleName.setText("");
+                } else {
+                    return;
+                }
 
                 // TO DO CHECK ERROR
 
@@ -111,16 +114,19 @@ public class NoteCreation extends AppCompatActivity {
         });//
     }
 
-    public String checkNoteTitle(String title) {
+    public boolean checkNoteTitle(String title) {
         String nameLookUp = dbHandler.searchNote(title);
         if (title.length() == 0) {
-            return "Please enter a title";
-        } else if (title.length() > 16) {
-            return "Please keep your title to less then 32 characters";
-        } else if (nameLookUp != null) {
-            return "Please keep your title to less then 32 characters";
+            Toast.makeText(getApplicationContext(),"Nothing typed, Please enter a title", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (title.length() > 32) {
+            Toast.makeText(getApplicationContext(),"Please keep your title to less then 32 characters", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (nameLookUp != null){
+            Toast.makeText(getApplicationContext(),"Sorry that Folder already exists, Please try another name", Toast.LENGTH_LONG).show();
+            return false;
         } else {
-            return title;
+            return true;
         }
     }
 

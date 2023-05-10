@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.content.Intent;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class SearchUser extends AppCompatActivity {
 
         TextView displayView = findViewById(R.id.displayUsers);
 
-        displayView.setText("\n" + "\n" + "\n" +"megan100" + "\n" + "megan400"+ "\n" + "megan500");
+        displayView.setText("\n" + "\n" + "\n" + "\n" + "will12345"+ "\n" + "henry345" + "\n" + "josh2003");
 
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +73,9 @@ public class SearchUser extends AppCompatActivity {
                 intent.putExtra("folderID", folderID);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
+
+                Toast.makeText(getApplicationContext(),"User folder request sent", Toast.LENGTH_LONG).show();
+
             }});
     };
 

@@ -113,21 +113,13 @@ public class NotesPages extends AppCompatActivity {
                 }
 
                 public void onSwipeLeft() {
-                    noteView.setBackgroundColor(Color.RED);
+                    //noteView.setBackgroundColor(Color.RED);
                     deleteNote(noteView, grid, noteName);
-                }
-
-                @Override // double tap to edit name
-                public boolean onDoubleTap(MotionEvent e) {
-                    noteView.setBackgroundColor(Color.YELLOW);
-                    //Log.d("Folder", folderID); // logcat test prove valid folderID
-                    // TO CHNAGE FOLDER NAME
-                    return super.onDoubleTap(e); // passes event as super to overide touch
                 }
 
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
-                    noteView.setBackgroundColor(Color.BLUE);
+                    //noteView.setBackgroundColor(Color.BLUE);
                     // TO GO TO VIEW
                     String noteIMG = dbHandler.getNoteImg(noteName);
                     Intent intent = new Intent(NotesPages.this, NoteCreation.class);

@@ -45,19 +45,27 @@ public class Folders extends AppCompatActivity {
     public String nameFolder() { // function to name folder + name validation //REUSE NOTES
         EditText name = (EditText) findViewById(R.id.folderNameEdit);
         String title = name.getText().toString();
-        //String nameLookUp = dbHandler.searchFolder(title);
-//        if (title.length() == 0) {
-//            return "Please enter a title";
-//        } else if (title.length() > 32) {
-//            return "Please keep your title to less then 32 characters";
-//        } else if (nameLookUp != null){
-//            return "name already taken";
-//        } else{
-//            name.setText("");
-////            return title;
-//        }
+
+        int valid = 0;
+
         name.setText("");
         return title;
+    }
+
+    public boolean nameCheck(String title){
+        String nameLookUp = dbHandler.searchFolder(title);
+        if (title.length() == 0) {
+            Toast.makeText(getApplicationContext(),"Nothing typed, Please enter a title", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (title.length() > 32) {
+            Toast.makeText(getApplicationContext(),"Please keep your title to less then 32 characters", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (nameLookUp != null){
+            Toast.makeText(getApplicationContext(),"Sorry that Folder already exists, Please try another name", Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            return true;
+        }
     }
 
 
@@ -83,8 +91,15 @@ public class Folders extends AppCompatActivity {
     @SuppressLint("ClickableViewAccessibility")
     public void folderAdd(android.view.View view) {
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
-
-        String folderName = nameFolder();
+        String folderName = "change";
+        EditText name = (EditText) findViewById(R.id.folderNameEdit);
+        String title = name.getText().toString();
+        if (nameCheck(title)){
+            folderName = title;
+            name.setText("");
+        } else {
+            return;
+        }
         AppCompatButton newFolder = createFolder(folderName);
         folder.addView(newFolder);
         folderInteractions(newFolder, folder);
@@ -120,6 +135,7 @@ public class Folders extends AppCompatActivity {
     public void folderInteractions(AppCompatButton newFolder, GridLayout folder) {
         View folderView = getFolder(newFolder.getText().toString(), folder); // uses get function to find view of the folder from grid layout
         String folderName = newFolder.getText().toString();
+
         newFolder.setOnTouchListener(new View.OnTouchListener() {
 
             private final GestureDetector gestDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
@@ -144,12 +160,17 @@ public class Folders extends AppCompatActivity {
 
                 @Override // double tap to edit name
                 public boolean onDoubleTap(MotionEvent e) {
-                    folderView.setBackgroundColor(Color.YELLOW);
+                    //folderView.setBackgroundColor(Color.YELLOW);
 
-                    //addUser("megan200", folderName);
+                    String name = nameFolder();
+                    newFolder.setText(name);
 
-                    //Log.d("Folder", folderID); // logcat test prove valid folderID
-                    // TO CHNAGE FOLDER NAME
+                    List<String> folderList = dbHandler.getFolder(folderName);
+                    int folderID = 2; //Integer.parseInt(folderList.get(0));
+
+                    //Log.d("Folder page", String.valueOf(folderID));
+                    //dbHandler.changeFoldername(name, folderID);
+
                     return super.onDoubleTap(e); // passes event as super to overide touch
                 }
 
@@ -157,8 +178,8 @@ public class Folders extends AppCompatActivity {
                 public boolean onSingleTapConfirmed(MotionEvent e) {
                     //folderView.setBackgroundColor(Color.BLUE);
                     //startActivity(new Intent(Folders.this, NotesPages.class));
-                    List<String> folder = dbHandler.getFolder(folderName);
-                    int folderID = Integer.parseInt(folder.get(0));
+                    List<String> folderList = dbHandler.getFolder(folderName);
+                    int folderID = Integer.parseInt(folderList.get(0));
 
                     Intent intent = new Intent(Folders.this, NotesPages.class);
                     intent.putExtra("folderID", folderID);
@@ -212,13 +233,11 @@ public class Folders extends AppCompatActivity {
         navBar.setSelectedItemId(R.id.homeButton);
         dbHandler = new DbHandler(Folders.this);
 
-// <<<<<<< henry
-//        dbHandler.insertUser("up1@myport.ac.uk", "megan100", "password");
-//        dbHandler.insertUser("up2@myport.ac.uk", "megan200", "password");
-//       dbHandler.insertUser("up3@myport.ac.uk", "megan300", "password");
+//        dbHandler.insertUser("up1@myport.ac.uk", "josh2josh", "password");
+//        dbHandler.insertUser("up2@myport.ac.uk", "will12345", "password");
+//        dbHandler.insertUser("up3@myport.ac.uk", "henry1234", "password");
 
-// =======
-// >>>>>>> master
+
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
         List<String> folderIDs = dbHandler.getUsersFolders(userID);
         if (folderIDs != null) {

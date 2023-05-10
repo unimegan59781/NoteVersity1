@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -23,8 +24,23 @@ import java.util.List;
 public class Profile extends AppCompatActivity {
 
 
-    private DbHandler dbHandler; // imports db handler //// here
- // here // links db handler to class and with variable dbHandler to call later
+    private DbHandler dbHandler;
+
+    public boolean checkName(String title) {
+        String nameLookUp = dbHandler.searchUser(title);
+        if (title.length() == 0) {
+            Toast.makeText(getApplicationContext(),"Nothing typed, Please enter a title", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (title.length() > 32) {
+            Toast.makeText(getApplicationContext(),"Please keep your title to less then 32 characters", Toast.LENGTH_LONG).show();
+            return false;
+        } else if (nameLookUp != null){
+            Toast.makeText(getApplicationContext(),"Sorry that Folder already exists, Please try another name", Toast.LENGTH_LONG).show();
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 
     public void setUsernameEmail(){
@@ -67,9 +83,10 @@ public class Profile extends AppCompatActivity {
 
     public void changeUsername(String newUsername){
         dbHandler = new DbHandler(Profile.this);
-        dbHandler.changeUserName(newUsername,1);
-        setUsernameEmail();
-
+        if (checkName(newUsername)){
+            dbHandler.changeUserName(newUsername,1);
+            setUsernameEmail();
+        }
     }
 
     public void showDialog(){
@@ -107,6 +124,9 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
         navBarController();
+
+        TextView infoText = findViewById(R.id.infoText);
+        infoText.setText("Thank you for using NoteVersity - to view items click, to delete notes + folders swipe left, to change a name double tap, B button changes the background. Enjoy!");
 
         AppCompatButton changeButton = findViewById(R.id.changeUsername);
         changeButton.setOnClickListener(view -> showDialog());
