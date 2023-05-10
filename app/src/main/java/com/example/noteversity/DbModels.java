@@ -35,8 +35,6 @@ public class DbModels { // TO COMMENT
     public static final String SENDER_ID  = "senderID";
     public static final String RECIPIENT_ID = "recipientID";
     public static final String FOLDER_ID = "folderID";
-    public static final String FOLDER_NAME = "folderName";
-    public static final String INVITE = "invite";
 
     // TABLE CREATION
     public static String CREATEUSERS = "create table " + tableList.get(0)
@@ -69,8 +67,6 @@ public class DbModels { // TO COMMENT
             + SENDER_ID + " INTEGER NOT NULL, "
             + RECIPIENT_ID + " INTEGER NOT NULL, "
             + FOLDER_ID + " INTEGER NOT NULL, "
-            + FOLDER_NAME + " TEXT NOT NULL, "
-            + INVITE + " BOOLEAN, "
             + TIMEDATE  + " NOT NULL);";
 
 }

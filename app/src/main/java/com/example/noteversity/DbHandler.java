@@ -88,6 +88,20 @@ public class DbHandler extends SQLiteOpenHelper {
                 return folder; // returns string in collunm order can change and make class/object if needed
         }
 
+
+//         public String getFolderNameH(int folderID) { // gets note with given note id from raw query
+//                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.F_ID + "=" + folderID + "", null);
+//                 //                                              Can search for ints in the database
+//                 // Use =? and selection args for multiple parameters, use x "=" y and selcArgs = null for 1 param
+//                 if (c != null && c.moveToFirst()) {
+//                         String name;
+//                         name = c.getString(2);
+//                         c.close();
+
+//                         return name; // returns string in column order can change and make class/object if needed
+//                 }
+//                 else return null;
+
         public List<String> getUsersFolders(int uID){
                 List<String> allFolders = new ArrayList<>();
                 c =  db.rawQuery("SELECT * FROM " + DbModels.tableList.get(3) + " WHERE " + DbModels.U_ID + "=" + uID, null);
@@ -128,6 +142,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 c.close();
 
                 return name;
+
         }
 
         public void deleteFolder(String folderName){
@@ -162,20 +177,54 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.insert(DbModels.tableList.get(2), null, contentValue); // null for auto filling id
         }
 
-        public void insertNotification(int notiID, int senderID, int recipientID, int folderID, String folderName, boolean invite) {
+        public void insertNotification(int senderID, int recipientID, int folderID) {
 
                 ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
-
-                contentValue.put(DbModels.NF_ID, notiID);
-                contentValue.put(DbModels.FOLDER_ID, folderID);
-                contentValue.put(DbModels.RECIPIENT_ID, recipientID);
                 contentValue.put(DbModels.SENDER_ID, senderID);
-                contentValue.put(DbModels.FOLDER_NAME, folderName);
-                contentValue.put(DbModels.INVITE, invite);
+                contentValue.put(DbModels.RECIPIENT_ID, recipientID);
+                contentValue.put(DbModels.FOLDER_ID, folderID);
                 contentValue.put(DbModels.TIMEDATE, String.valueOf(LocalDate.now())); // date as YYYY-MM-DD for now
 
                 db.insert(DbModels.tableList.get(4), null, contentValue); // null for auto filling id
-         }
+        }
+
+        public void deleteNotification(int notiID){
+                String n_ID = String.valueOf(notiID);
+                db.delete(DbModels.tableList.get(4), DbModels.RECIPIENT_ID + "=?",new String[]{n_ID}); // delete all notes in folder
+                //db.delete(DbModels.tableList.get(2), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete all notes in folder
+        }
+
+        public String notiMessage(int folderID,String senderID){
+                String sender = getUsername(senderID);
+                String folder = getFolderName(folderID);
+                return sender + " has shared the folder " + folder + " with you";
+        }
+
+
+        public List<List<String>> getNotifications(int userID) {
+                c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(4) + " WHERE " + DbModels.RECIPIENT_ID + "=" + userID + "", null);
+                c.moveToFirst();
+                List<List<String>> notificationList = new ArrayList<List<String>>();
+                List<String> notification = null;
+                if (c != null && c.moveToFirst()) {
+                        do {
+                                String nfID = c.getString(0);
+                                String senderID = c.getString(1);
+                                String recipientID = c.getString(2);
+                                String folderID = c.getString(3);
+                                String timeDate = c.getString(4);
+                                String message = notiMessage(Integer.parseInt(folderID), senderID);
+                                notification = Arrays.asList(nfID, senderID, recipientID, folderID,message);
+                                notificationList.add(notification);
+                        } while (c.moveToNext());
+                }
+                if (c == null) {
+                        return null;
+                }
+                c.close();
+
+                return notificationList; // returns string in column order can change and make class/object if needed
+        }
 
         public String searchUser(String userName){ // gets folder with given id from raw query
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.USERNAME + "=?", new String[]{userName});
@@ -188,6 +237,17 @@ public class DbHandler extends SQLiteOpenHelper {
 
                 return userID;
         }
+
+
+        public String getUsername(String userID){ // gets folder with given id from raw query
+                c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.U_ID + "=" + userID + "",null);
+                if (c != null && c.moveToFirst()) {
+                        String username = c.getString(2);
+                        c.close();
+
+                        return username;
+                }
+                else return null;
 
         public String searchEmail(String email) {
                 // gets folder with given id from raw query
@@ -295,7 +355,6 @@ public class DbHandler extends SQLiteOpenHelper {
 
                 return noteNames; // returns string in collunm order can change and make class/object if needed
         }
-
 
         public String getNoteImg(String noteName){ // gets note with given note id from raw query
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.NAME + "=?", new String[] { noteName });
