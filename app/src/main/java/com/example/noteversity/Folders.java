@@ -32,10 +32,12 @@ public class Folders extends AppCompatActivity {
 
     public int userID; // sets userID that can be get from previous
 
+    //Shorthand for getApplicationContext()
     public android.content.Context cntx() {
         return getApplicationContext();
     }
 
+    //Gets screen pixel density and uses it to turn dependent pixels into their relative pixel values for display
     public static int DPtoPixels(android.content.Context context, int dp) {
         float scale = context.getResources().getDisplayMetrics().density;
         int pixels = (int) (dp * scale + 0.5f);

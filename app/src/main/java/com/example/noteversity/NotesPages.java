@@ -26,9 +26,12 @@ public class NotesPages extends AppCompatActivity {
 
     private DbHandler dbHandler;
 
+    //Shorthand for getApplicationContext()
     public android.content.Context cntx(){
         return getApplicationContext();
     }
+
+    //Gets screen pixel density and uses it to turn dependent pixels into their relative pixel values for display
     public static int DPtoPixels(android.content.Context context, int dp) {
         float scale = context.getResources().getDisplayMetrics().density;
         int pixels = (int) (dp * scale + 0.5f);
@@ -36,6 +39,7 @@ public class NotesPages extends AppCompatActivity {
     }
 
     @Override
+    //Gets all notes from database, and creates/draws them on screen.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notes_page);
@@ -92,6 +96,7 @@ public class NotesPages extends AppCompatActivity {
             }});
     };
 
+    //Configures how the user's inputs on a note get recieved, also links to database depending on action.
     public void noteInteractions(AppCompatButton note, GridLayout grid, int fID, int userID) {
         View noteView = getNote(note.getText().toString(), grid); // uses get function to find view of the folder from grid layout
         String noteName = note.getText().toString();
@@ -142,8 +147,8 @@ public class NotesPages extends AppCompatActivity {
         });
 
     }
-
-    public View getNote(String noteName, GridLayout grid) { // function that loops the views in folder grid layout to find location of view with desired name
+    // function that loops the views in folder grid layout to find location of view with desired name
+    public View getNote(String noteName, GridLayout grid) {
         for(int i = 0; i < grid.getChildCount(); i++) {
             View noteView = grid.getChildAt(i);
             if(noteView instanceof Button) { // itterates through folders in grid
@@ -156,13 +161,14 @@ public class NotesPages extends AppCompatActivity {
         return null; // folder doesn't exist (error checker - shouldn't occcur)
     }
 
-    public void deleteNote(View noteView, GridLayout grid, String name) { // delete folder from view
+    //Function to delete a note and it's corresponding view on screen
+    public void deleteNote(View noteView, GridLayout grid, String name) {
         grid.removeView(noteView); // removes view in grid layout folder with view thats be named
         dbHandler.deleteNote(name);
-        //dbHandler.deleteFolder(name);
-        // TO ADD DB DELETE CODE
+
         };
 
+    //Creates a new button, sets the visual content and respective margin/padding, and returns the note to be added to the screen
     public AppCompatButton createNote(String noteName, String noteIMG){
         AppCompatButton newNote = new AppCompatButton(this);
         GridLayout.LayoutParams params = new GridLayout.LayoutParams(GridLayout.spec(
@@ -181,21 +187,5 @@ public class NotesPages extends AppCompatActivity {
     }
 }
 
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        int id = item.getItemId();
-//
-//        if (id == R.id.homeButton) {
-//            System.out.println("home");
-//            return true;
-//        }
-//
-////        else if (id==R.id.login)
-////        {
-////            // add your action here that you want
-////        }
-//
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+
 

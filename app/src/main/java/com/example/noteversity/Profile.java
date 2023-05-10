@@ -27,6 +27,7 @@ public class Profile extends AppCompatActivity {
 
     private int userID; // gloable user id got from intent in oncreate
 
+
     public boolean checkName(String title) {
         String nameLookUp = dbHandler.searchUser(title);
         if (title.length() == 0) {
