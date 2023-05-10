@@ -28,6 +28,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class Notifications extends AppCompatActivity {
+
     public void navBarController(){
         BottomNavigationView bottomBar = findViewById(R.id.bottomBar);
         bottomBar.setSelectedItemId(R.id.notifButton);
@@ -65,6 +66,9 @@ public class Notifications extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Intent intent = new Intent();
+        int userID = intent.getIntExtra("userID", 0);
+
         setContentView(R.layout.notifications);
         dbHandler = new DbHandler(Notifications.this); // here // links db handler to class and with variable dbHandler to call later
         navBarController();
@@ -89,10 +93,10 @@ public class Notifications extends AppCompatActivity {
 
 
 */
-        dbHandler.insertNotification(1,3,3);
+        dbHandler.insertNotification(2,1,1);
 
 
-        stringNotis = dbHandler.getNotifications(3);
+        stringNotis = dbHandler.getNotifications(1);
 
         addNotiRows();
 
@@ -111,7 +115,7 @@ public class Notifications extends AppCompatActivity {
         }
     }
 
-    public void openDialog(List<String> noti) {
+    public void openDialog(List<String> noti, AppCompatButton notiBut) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Folder Invitation:")
                 // Below will be a premade message fetched from the get Notifications
@@ -121,14 +125,15 @@ public class Notifications extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which){
                         // Message (Maybe not)
                         dbHandler.deleteNotification(Integer.parseInt(noti.get(0)));
+                        findViewById(R.id.grid).setVisibility(View.INVISIBLE);
+
                     }
                 })
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which){
-                        // Create/EDIT UF_LINK:
-
-                        // Megan UF - noti contains the data: nfID, senderID, recipientID, folderID,message in that order
+                        //dbHandler.deleteUFlink(fID);
+                        findViewById(R.id.grid).setVisibility(View.INVISIBLE);
                     }
                 });
         builder.show();
@@ -171,7 +176,7 @@ public class Notifications extends AppCompatActivity {
             notiButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    openDialog(stringNotis.get(notiButton.getId()));
+                    openDialog(stringNotis.get(notiButton.getId()), notiButton);
                 }
             });
             table.addView(notiButton);
