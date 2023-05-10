@@ -30,7 +30,7 @@ import java.util.List;
 public class Folders extends AppCompatActivity {
     private DbHandler dbHandler; // imports db handler
 
-    public int userID;
+    public int userID; // sets userID that can be get from previous
 
     public android.content.Context cntx() {
         return getApplicationContext();
@@ -40,16 +40,6 @@ public class Folders extends AppCompatActivity {
         float scale = context.getResources().getDisplayMetrics().density;
         int pixels = (int) (dp * scale + 0.5f);
         return pixels;
-    }
-
-    public String nameFolder() { // function to name folder + name validation //REUSE NOTES
-        EditText name = (EditText) findViewById(R.id.folderNameEdit);
-        String title = name.getText().toString();
-
-        int valid = 0;
-
-        name.setText("");
-        return title;
     }
 
     public boolean nameCheck(String title){
@@ -162,8 +152,16 @@ public class Folders extends AppCompatActivity {
                 public boolean onDoubleTap(MotionEvent e) {
                     //folderView.setBackgroundColor(Color.YELLOW);
 
-                    String name = nameFolder();
-                    newFolder.setText(name);
+                    String newName = "change";
+                    EditText name = (EditText) findViewById(R.id.folderNameEdit);
+                    String title = name.getText().toString();
+                    if (nameCheck(title)){
+                        newName = title;
+                        name.setText("");
+                    } else {
+                        newName = folderName;
+                    }
+                    newFolder.setText(newName);
 
                     List<String> folderList = dbHandler.getFolder(folderName);
                     int folderID = 2; //Integer.parseInt(folderList.get(0));
