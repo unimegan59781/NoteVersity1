@@ -61,7 +61,7 @@ public class Login extends AppCompatActivity {
         }
         Intent intent = new Intent(Login.this, Folders.class);
         int uID = Integer.parseInt(user);
-        //intent.putExtra("userID", uID);// key is used to get value in Second Activiy
+        intent.putExtra("userID", uID);// key is used to get value in Second Activiy
         startActivity(intent);
     }
 

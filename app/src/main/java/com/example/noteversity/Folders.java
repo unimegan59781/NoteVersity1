@@ -30,7 +30,7 @@ import java.util.List;
 public class Folders extends AppCompatActivity {
     private DbHandler dbHandler; // imports db handler
 
-    public int userID = 0;
+    public int userID;
 
     public android.content.Context cntx() {
         return getApplicationContext();
@@ -233,10 +233,8 @@ public class Folders extends AppCompatActivity {
         navBar.setSelectedItemId(R.id.homeButton);
         dbHandler = new DbHandler(Folders.this);
 
-//        dbHandler.insertUser("up1@myport.ac.uk", "josh2josh", "password");
-//        dbHandler.insertUser("up2@myport.ac.uk", "will12345", "password");
-//        dbHandler.insertUser("up3@myport.ac.uk", "henry1234", "password");
-
+        Intent intent = getIntent();
+        int userID = intent.getIntExtra("userID", 0);
 
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
         List<String> folderIDs = dbHandler.getUsersFolders(userID);

@@ -23,7 +23,7 @@ import java.util.List;
 
 public class Profile extends AppCompatActivity {
 
-
+    private int userID;
     private DbHandler dbHandler;
 
     public boolean checkName(String title) {
@@ -43,9 +43,9 @@ public class Profile extends AppCompatActivity {
     }
 
 
-    public void setUsernameEmail(){
+    public void setUsernameEmail(int userID){
         dbHandler = new DbHandler(Profile.this);
-        List<String> userInfo = dbHandler.getUser(1);
+        List<String> userInfo = dbHandler.getUser(userID);
 
         TextView username = findViewById(R.id.usernameTV);
         username.setText(userInfo.get(2));
@@ -81,11 +81,11 @@ public class Profile extends AppCompatActivity {
         });
     }
 
-    public void changeUsername(String newUsername){
+    public void changeUsername(String newUsername, int userID){
         dbHandler = new DbHandler(Profile.this);
         if (checkName(newUsername)){
-            dbHandler.changeUserName(newUsername,1);
-            setUsernameEmail();
+            dbHandler.changeUserName(newUsername,userID);
+            setUsernameEmail(userID);
         }
     }
 
@@ -101,7 +101,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String newUsername = newUsernameText.getText().toString();
-                changeUsername(newUsername);
+                changeUsername(newUsername, userID);
                 //put change here
             }
         });
@@ -131,7 +131,9 @@ public class Profile extends AppCompatActivity {
         AppCompatButton changeButton = findViewById(R.id.changeUsername);
         changeButton.setOnClickListener(view -> showDialog());
 
-        setUsernameEmail();
+        Intent intent = getIntent();
+        int userID = intent.getIntExtra("userID", 0);
+        setUsernameEmail(userID);
 
     }
 }
