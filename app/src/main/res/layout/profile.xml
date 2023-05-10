@@ -20,14 +20,28 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/usernameTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Firstname Lastname"
+        android:text="-- Username-- "
         android:textColor="@color/black"
         android:textStyle="bold"
         android:textSize="25dp"
         android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@id/profileHead"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/emailTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="test@gmail.com"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/usernameTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -39,4 +53,29 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu" />
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:textAlignment="center"
+        android:text="Thank you for using NoteVersity!"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailTV" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/changeUsername"
+        android:layout_width="312dp"
+        android:layout_height="59dp"
+        android:background="@drawable/button_view"
+        android:text="Change username"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emailTV"
+        app:layout_constraintVertical_bias="0.976" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

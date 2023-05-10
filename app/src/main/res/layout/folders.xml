@@ -24,16 +24,7 @@
             android:columnCount="1"
             android:rowCount="2">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_gravity="fill"
-                android:layout_margin="3dp"
-                android:layout_marginBottom="6dp"
-                android:background="@drawable/folder_view"
-                android:gravity="start|center_vertical"
-                android:paddingStart="15dp"
-                android:text="Folder 3" />
+
 
 
         </GridLayout>
@@ -43,6 +34,7 @@
         android:id="@+id/folderNameEdit"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:hint="Type Folder Name"
         app:layout_constraintBottom_toTopOf="@id/bottomBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
