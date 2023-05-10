@@ -23,16 +23,9 @@ import java.util.List;
 
 public class Profile extends AppCompatActivity {
 
-    private DbHandler dbHandler; // imports db handler //// here
- // here // links db handler to class and with variable dbHandler to call later
+    private DbHandler dbHandler; // imports db handler
 
-//Gets the currently logged in user's info using dbHandler, and changes the TextViews on the profile screen
-    public void setUsernameEmail(){
-        dbHandler = new DbHandler(Profile.this);
-        List<String> userInfo = dbHandler.getUser(1); //getting data
-      
     private int userID;
-    private DbHandler dbHandler;
 
     public boolean checkName(String title) {
         String nameLookUp = dbHandler.searchUser(title);
