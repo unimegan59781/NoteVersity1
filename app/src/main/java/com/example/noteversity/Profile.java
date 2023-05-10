@@ -22,14 +22,13 @@ import java.util.List;
 
 public class Profile extends AppCompatActivity {
 
-
     private DbHandler dbHandler; // imports db handler //// here
  // here // links db handler to class and with variable dbHandler to call later
 
-
+//Gets the currently logged in user's info using dbHandler, and changes the TextViews on the profile screen
     public void setUsernameEmail(){
         dbHandler = new DbHandler(Profile.this);
-        List<String> userInfo = dbHandler.getUser(1);
+        List<String> userInfo = dbHandler.getUser(1); //getting data
 
         TextView username = findViewById(R.id.usernameTV);
         username.setText(userInfo.get(2));
@@ -40,6 +39,7 @@ public class Profile extends AppCompatActivity {
 
     }
 
+    //Adds functionality to buttons on the bottom navigation bar by switching to the correct intent on item selected
     public void navBarController(){
         BottomNavigationView bottomBar = findViewById(R.id.bottomBar);
         bottomBar.setSelectedItemId(R.id.profileButton);
@@ -65,6 +65,7 @@ public class Profile extends AppCompatActivity {
         });
     }
 
+    //uses dbHandler.changeUserName with the new username parameter passed to it by showDialog
     public void changeUsername(String newUsername){
         dbHandler = new DbHandler(Profile.this);
         dbHandler.changeUserName(newUsername,1);
@@ -72,14 +73,17 @@ public class Profile extends AppCompatActivity {
 
     }
 
+    //Creates a new dialog using the change_username_dialog layout resource
     public void showDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.change_username_dialog, null);
-        builder.setView(dialogView);
+        builder.setView(dialogView); //adding the layout to the dialog
 
         EditText newUsernameText = dialogView.findViewById(R.id.new_username);
         builder.setTitle("Change Username");
+
+        //setting save button
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -88,6 +92,7 @@ public class Profile extends AppCompatActivity {
                 //put change here
             }
         });
+        //setting cancel button
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -96,7 +101,7 @@ public class Profile extends AppCompatActivity {
         });
 
         AlertDialog dialog = builder.create();
-        dialog.show();
+        dialog.show(); //showing the dialog
 
 
 
