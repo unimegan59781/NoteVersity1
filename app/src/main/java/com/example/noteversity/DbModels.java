@@ -9,7 +9,7 @@ import java.util.List;
 
 public class DbModels { // TO COMMENT
 
-    static List<String> tableList = Arrays.asList("USERS", "FOLDERS", "NOTES","UFLINK","NOTIFICATIONS"); //list of table names -- KEEP ORDER FOR CROSS REFERNCING
+    static List<String> tableList = Arrays.asList("USERS", "FOLDERS", "NOTES", "UFLINK", "NOTIFICATIONS"); //list of table names -- KEEP ORDER FOR CROSS REFERNCING
 
     // USERS TABLE
     public static final String U_ID = "userID";
