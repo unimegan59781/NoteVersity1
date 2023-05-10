@@ -54,11 +54,11 @@
         app:menu="@menu/bottom_nav_menu" />
 
     <TextView
+        android:id="@+id/infoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:textAlignment="center"
-        android:text="Thank you for using NoteVersity!"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
 

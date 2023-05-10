@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.content.Intent;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -45,8 +46,6 @@ public class SearchUser extends AppCompatActivity {
 
         TextView displayView = findViewById(R.id.displayUsers);
 
-        displayView.setText("\n" + "\n" + "\n" +"megan100" + "\n" + "megan400"+ "\n" + "megan500");
-
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,12 +65,15 @@ public class SearchUser extends AppCompatActivity {
 
                 dbHandler.insertUFlink(searchID, folderID);
 
-                // link notifications HENRY
+                dbHandler.insertNotification(userID,searchID,folderID);
 
                 Intent intent = new Intent(SearchUser.this, NotesPages.class);
                 intent.putExtra("folderID", folderID);
                 intent.putExtra("userID", userID);
                 startActivity(intent);
+
+                Toast.makeText(getApplicationContext(),"User folder request sent", Toast.LENGTH_LONG).show();
+
             }});
     };
 
