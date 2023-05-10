@@ -42,6 +42,7 @@ public class Folders extends AppCompatActivity {
         return pixels;
     }
 
+    //
     public boolean nameCheck(String title){
         String nameLookUp = dbHandler.searchFolder(title);
         if (title.length() == 0) {
@@ -150,7 +151,6 @@ public class Folders extends AppCompatActivity {
 
                 @Override // double tap to edit name
                 public boolean onDoubleTap(MotionEvent e) {
-                    //folderView.setBackgroundColor(Color.YELLOW);
 
                     String newName = "change";
                     EditText name = (EditText) findViewById(R.id.folderNameEdit);
