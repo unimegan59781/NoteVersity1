@@ -160,16 +160,13 @@ public class Folders extends AppCompatActivity {
 
                 @Override // double tap to edit name
                 public boolean onDoubleTap(MotionEvent e) {
-                    //folderView.setBackgroundColor(Color.YELLOW);
 
                     String name = nameFolder();
                     newFolder.setText(name);
 
                     List<String> folderList = dbHandler.getFolder(folderName);
-                    int folderID = 2; //Integer.parseInt(folderList.get(0));
-
-                    //Log.d("Folder page", String.valueOf(folderID));
-                    //dbHandler.changeFoldername(name, folderID);
+                    int folderID = Integer.parseInt(folderList.get(0));
+                    dbHandler.changeFoldername(name, folderID);
 
                     return super.onDoubleTap(e); // passes event as super to overide touch
                 }
