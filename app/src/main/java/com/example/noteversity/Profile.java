@@ -27,6 +27,7 @@ public class Profile extends AppCompatActivity {
 
     private int userID;
 
+
     public boolean checkName(String title) {
         String nameLookUp = dbHandler.searchUser(title);
         if (title.length() == 0) {
