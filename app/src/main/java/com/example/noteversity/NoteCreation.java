@@ -39,7 +39,6 @@ public class NoteCreation extends AppCompatActivity {
         Boolean oldNote = intent.getBooleanExtra("previousNote", false);
         int folderID = intent.getIntExtra("folderID", 0);
         int userID = intent.getIntExtra("userID", 0);
-        Log.d("Folder get creation page", String.valueOf(folderID));
 
 
         Draw note = new Draw(this); // creates new isntace of draw class so user can create note

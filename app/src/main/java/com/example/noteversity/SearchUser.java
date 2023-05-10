@@ -46,8 +46,6 @@ public class SearchUser extends AppCompatActivity {
 
         TextView displayView = findViewById(R.id.displayUsers);
 
-        displayView.setText("\n" + "\n" + "\n" + "\n" + "will12345"+ "\n" + "henry345" + "\n" + "josh2003");
-
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +65,7 @@ public class SearchUser extends AppCompatActivity {
 
                 dbHandler.insertUFlink(searchID, folderID);
 
-                // link notifications HENRY
+                dbHandler.insertNotification(userID,searchID,folderID);
 
                 Intent intent = new Intent(SearchUser.this, NotesPages.class);
                 intent.putExtra("folderID", folderID);
