@@ -248,6 +248,7 @@ public class DbHandler extends SQLiteOpenHelper {
                         return username;
                 }
                 else return null;
+        }
 
         public String searchEmail(String email) {
                 // gets folder with given id from raw query
