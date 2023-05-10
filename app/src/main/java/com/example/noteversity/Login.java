@@ -53,6 +53,7 @@ public class Login extends AppCompatActivity {
         });
     }
 
+    // Handles user authentication and authorization, inserts a new user if they do not exist in the database
     public void userLogin(String name, String email){
         String user = dbHandler.searchEmail(email);
         if (user == null){
@@ -61,7 +62,7 @@ public class Login extends AppCompatActivity {
         }
         Intent intent = new Intent(Login.this, Folders.class);
         int uID = Integer.parseInt(user);
-        intent.putExtra("userID", uID);// key is used to get value in Second Activiy
+        intent.putExtra("userID", uID);// key is used to get value in Second Activity
         startActivity(intent);
     }
 
@@ -87,7 +88,6 @@ public class Login extends AppCompatActivity {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
                 Toast.makeText(getApplicationContext(),"fail", Toast.LENGTH_LONG).show();
-                // ...
             }
         }
     }
