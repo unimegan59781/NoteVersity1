@@ -13,11 +13,12 @@ import android.view.ViewGroup.LayoutParams;
 public class Draw extends View {
 
     public LayoutParams layout; // sets view attributes
-    private Path penPath = new Path();
-    private Paint pen = new Paint();
+    private Path penPath = new Path(); // tracks pen path
+    private Paint pen = new Paint(); // sets paint of pen to draw
 
 
-    public Draw(Context context) { // constructor for layout of drawing on note page
+    // constructor for layout of drawing on note page
+    public Draw(Context context) {
         super(context);
 
         layout = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -29,6 +30,7 @@ public class Draw extends View {
 
         }
 
+        // tracks pen movement and creates path every time user interacts with screen
         @Override
         public boolean onTouchEvent(MotionEvent event) {
             float pX = event.getX();
@@ -49,11 +51,13 @@ public class Draw extends View {
             return false;
         }
 
+        // draws using set pen and path created by user intercations
         @Override
         protected void onDraw(Canvas canvas){
             canvas.drawPath(penPath, pen);
         }
 
+        // cleans path on page and resets draw
         public void clean(){ // clean note page
         penPath.reset();
         invalidate();

@@ -25,7 +25,7 @@ public class Profile extends AppCompatActivity {
 
     private DbHandler dbHandler; // imports db handler
 
-    private int userID;
+    private int userID; // gloable user id got from intent in oncreate
 
     public boolean checkName(String title) {
         String nameLookUp = dbHandler.searchUser(title);
@@ -44,6 +44,7 @@ public class Profile extends AppCompatActivity {
     }
 
 
+    // set username uses user id to retirve name and email and get using databse
     public void setUsernameEmail(int userID){
         dbHandler = new DbHandler(Profile.this);
         List<String> userInfo = dbHandler.getUser(userID);
@@ -126,6 +127,7 @@ public class Profile extends AppCompatActivity {
 
     }
 
+    // inital start displays info text and allows user to chnage username
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

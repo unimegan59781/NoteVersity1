@@ -47,9 +47,25 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.insert(DbModels.tableList.get(3), null, contentValue); // null for filling the id
         }
 
-        // delete folder
+        // delete folder linked to user
         public void deleteUFlink(int ufID){
-                db.delete(DbModels.tableList.get(2), DbModels.NAME + "=?", null);
+                db.delete(DbModels.tableList.get(3), DbModels.UF_ID + "=?", null);
+        }
+
+        public String getUFLink(int fID, int uID) {
+                c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(3) + " WHERE " + DbModels.U_ID + "=" + uID + " AND " + DbModels.F_ID + "=" + fID, null);
+
+                if (c.getCount() == 0) {
+                        c.close();
+                        return null;
+                }
+
+                c.moveToFirst();
+
+                String ufID = c.getString(0);
+                c.close();
+
+                return ufID;
         }
 
         // insert user to db function (login page)
