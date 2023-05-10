@@ -13,17 +13,21 @@ import java.util.List;
 
 public class DbHandler extends SQLiteOpenHelper {
 
-        static final int DB_VERSION = 6; // db version control
+        static final int DB_VERSION = 1; // db version control
 
-        public DbHandler(Context context) { // Blank constructor
+        // Blank constructor
+        public DbHandler(Context context) {
                 super(context, "NoteVersity.DB", null, DB_VERSION);
         }
 
-        SQLiteDatabase db = this.getReadableDatabase(); // gets db so can read/write
-        //SQLiteDatabase dbb = this.getWritableDatabase();
+        // gets db so can read/write
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // cursor for sql searchers through db
         Cursor c;
 
-        @Override // links dbModles on create to generate tables
+        // links dbModles on create to generate tables
+        @Override
         public void onCreate(SQLiteDatabase db) {
                 db.execSQL(DbModels.CREATEUSERS);
                 db.execSQL(DbModels.CREATEFOLDERS);
@@ -32,6 +36,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.execSQL(DbModels.CREATENOTIFICATIONS);
         }
 
+        // insert user to folder
         public void insertUFlink(int uID, int fID) {
 
                 ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
@@ -42,13 +47,12 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.insert(DbModels.tableList.get(3), null, contentValue); // null for filling the id
         }
 
+        // delete folder
         public void deleteUFlink(int ufID){
                 db.delete(DbModels.tableList.get(2), DbModels.NAME + "=?", null);
         }
 
-
-
-
+        // insert user to db function (login page)
         public void insertUser(String email, String username, String password) {
 
                 ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
@@ -60,7 +64,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.insert(DbModels.tableList.get(0), null, contentValue); // null for filling the id
         }
 
-
+        // insert folder function with user that created it
         public void insertFolder(int userID, String folderName) {
 
                 ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
@@ -72,6 +76,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.insert(DbModels.tableList.get(1), null, contentValue); // null for auto fill id
         }
 
+        // return list string of folder details
         public List<String> getFolder(String folderName){ // gets note with given note id from raw query
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.FOLDER + "=?", new String[]{folderName});
                 c.moveToFirst();
@@ -88,20 +93,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 return folder; // returns string in collunm order can change and make class/object if needed
         }
 
-
-//         public String getFolderNameH(int folderID) { // gets note with given note id from raw query
-//                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.F_ID + "=" + folderID + "", null);
-//                 //                                              Can search for ints in the database
-//                 // Use =? and selection args for multiple parameters, use x "=" y and selcArgs = null for 1 param
-//                 if (c != null && c.moveToFirst()) {
-//                         String name;
-//                         name = c.getString(2);
-//                         c.close();
-
-//                         return name; // returns string in column order can change and make class/object if needed
-//                 }
-//                 else return null;
-
+        // return list of strings of folder ids user in
         public List<String> getUsersFolders(int uID){
                 List<String> allFolders = new ArrayList<>();
                 c =  db.rawQuery("SELECT * FROM " + DbModels.tableList.get(3) + " WHERE " + DbModels.U_ID + "=" + uID, null);
@@ -115,6 +107,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 return allFolders;
         }
 
+        // returns list of userid in certain folder
         public List<String> getUsersInFolder(int fID){
                 List<String> allUsers = new ArrayList<>();
                 c =  db.rawQuery("SELECT * FROM " + DbModels.tableList.get(3) + " WHERE " + DbModels.F_ID + "=" + fID, null);
@@ -128,6 +121,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 return allUsers;
         }
 
+        // gets name of folder from its id
         public String getFolderName(int fID){
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.F_ID + "=" + fID, null);
 
@@ -145,32 +139,20 @@ public class DbHandler extends SQLiteOpenHelper {
 
         }
 
+        // deletes whole folder from id and notes inside
         public void deleteFolder(String folderName){
-                //db.delete(DbModels.tableList.get(2), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete all notes in folder
                 List<String> folder = getFolder(folderName);
                 String folderID = folder.get(0);
                 db.delete(DbModels.tableList.get(1), DbModels.FOLDER + "=?", new String[]{folderName});
                 db.delete(DbModels.tableList.get(2), DbModels.F_ID + "=?", new String[]{folderID});
-
-                //db.delete(DbModels.tableList.get(1), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete folder
-                //db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.F_ID + "=" + folderID + "", null );
         }
 
-        public void deleteMe(String uID){
-                db.delete(DbModels.tableList.get(0), DbModels.U_ID + "=?", new String[]{uID});
-
-                //db.delete(DbModels.tableList.get(1), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete folder
-                //db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.F_ID + "=" + folderID + "", null );
-        }
-
+        // deletes note from name
         public void deleteNote(String noteName){
                 db.delete(DbModels.tableList.get(2), DbModels.NAME + "=?", new String[]{noteName});
-
-                //db.delete(DbModels.tableList.get(1), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete folder
-                //db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.F_ID + "=" + folderID + "", null );
         }
 
-
+        // inserts note into db getting info from note creation
         public void insertNotes(int userID, int folderID, String noteName, String noteIMG) {
 
                 ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
@@ -184,6 +166,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.insert(DbModels.tableList.get(2), null, contentValue); // null for auto filling id
         }
 
+        // insert notification in search user that creates notification to send
         public void insertNotification(int senderID, int recipientID, int folderID) {
 
                 ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
@@ -195,19 +178,20 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.insert(DbModels.tableList.get(4), null, contentValue); // null for auto filling id
         }
 
+        // deletes notiifcation from database
         public void deleteNotification(int notiID){
                 String n_ID = String.valueOf(notiID);
                 db.delete(DbModels.tableList.get(4), DbModels.RECIPIENT_ID + "=?",new String[]{n_ID}); // delete all notes in folder
-                //db.delete(DbModels.tableList.get(2), "F_ID=?", new String[]{String.valueOf(folderID)}); // delete all notes in folder
         }
 
+        // creates notiifcation message to display
         public String notiMessage(int folderID,String senderID){
-                String sender = getUsername(senderID);
+                String sender = getUserName(Integer.parseInt(senderID));
                 String folder = getFolderName(folderID);
                 return sender + " has shared the folder " + folder + " with you";
         }
 
-
+        // returns list of notifications that user has to display
         public List<List<String>> getNotifications(int userID) {
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(4) + " WHERE " + DbModels.RECIPIENT_ID + "=" + userID + "", null);
                 c.moveToFirst();
@@ -233,6 +217,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 return notificationList; // returns string in column order can change and make class/object if needed
         }
 
+        // takes username and searches if user in database if not returns null
         public String searchUser(String userName){ // gets folder with given id from raw query
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.USERNAME + "=?", new String[]{userName});
                 if (c == null) {
@@ -247,18 +232,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 return null;
         }
 
-
-        public String getUsername(String userID){ // gets folder with given id from raw query
-                c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.U_ID + "=" + userID + "",null);
-                if (c != null && c.moveToFirst()) {
-                        String username = c.getString(2);
-                        c.close();
-
-                        return username;
-                }
-                else return null;
-        }
-
+        // takes email and searches if user in database if not returns null
         public String searchEmail(String email) {
                 // gets folder with given id from raw query
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.EMAIL + "=?", new String[]{email});
@@ -275,6 +249,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 return userID;
         }
 
+        // checks if name of note in db to name validate
         public String searchNote(String name){ // gets folder with given id from raw query
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.NAME + "=?", new String[]{name});
                 if (c == null) {
@@ -289,6 +264,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 return null;
         }
 
+        // checks if name of the folder already in db to name validate
         public String searchFolder(String name){
                 // gets folder with given name from raw query
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.FOLDER + "=?", new String[]{name});
@@ -303,7 +279,8 @@ public class DbHandler extends SQLiteOpenHelper {
                 c.close();
                 return null;
         }
-         
+
+        // gets result of whole user from its id
         public List<String> getUser(int uID){
                 c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.U_ID + "=" + uID + "", null );
                 c.moveToFirst();
@@ -320,6 +297,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 return user; // returns string in collunm order can change and make class/object if needed
         }
 
+        // gets username from user id id db for message
         public String getUserName(int uID) {
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.U_ID + "=" + uID, null);
 
@@ -336,25 +314,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 return name;
         }
 
-        public List<String> getAllFolders(int uID){ // gets folder with given id from raw query
-                List<String> allFolders = new ArrayList<>();
-                c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.U_ID + "=" + uID + "", null );
-                c.moveToFirst();
-
-                if (c != null && c.moveToFirst()) {
-                        do {
-                                String folderName = c.getString(2);
-                                allFolders.add(folderName);
-                        } while (c.moveToNext());
-                }
-                if (c == null) {
-                        return null;
-                }
-                c.close();
-
-                return allFolders; // returns string in collunm order can change and make class/object if needed
-        }
-
+        // gets all notes in folder to display (returns list of names of notes)
         public List<String> getFolderNotes(int fID){ // gets note with given note id from raw query
                 List<String> noteNames = new ArrayList<>();
                 c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.F_ID + "=" + fID + "", null );
@@ -373,6 +333,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 return noteNames; // returns string in collunm order can change and make class/object if needed
         }
 
+        // returns image string (byte[]) to turn into bitmap and set as background to edit
         public String getNoteImg(String noteName){ // gets note with given note id from raw query
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.NAME + "=?", new String[] { noteName });
                 c.moveToFirst();
@@ -385,50 +346,22 @@ public class DbHandler extends SQLiteOpenHelper {
                 return noteImg; // returns string in collunm order can change and make class/object if needed
         }
 
+        // change username on profile page
         public void changeUserName(String username, int uID){
                 String sql = "UPDATE USERS SET username = " + "'"+username+"' " + "WHERE userID = " + uID;
                 System.out.println(sql);
                 db.execSQL(sql);
         }
 
+        // change foldername when double tap folder page
         public void changeFoldername(String name, int fID){
                 String sql = "UPDATE FOLDERS SET folderName = " + "'"+name+"' " + "WHERE folderID = " + fID;
                 //System.out.println(sql);
                 db.execSQL(sql);
         }
 
-        public void changeNoteName(String name, int nID){
-                String sql = "UPDATE NOTES SET noteName = " + "'"+name+"' " + "WHERE noteID = " + nID;
-                //System.out.println(sql);
-                db.execSQL(sql);
-        }
-
-        public List<String> getNote(int nID){ // gets note with given note id from raw query
-                c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.N_ID + "=" + nID + "", null );
-                c.moveToFirst();
-                if (c == null) {
-                        return null;
-                }
-//                int nInt = c.getColumnIndex(DbModels.N_ID);
-//                int fInt = c.getColumnIndex(DbModels.F_ID);
-//                int uInt = c.getColumnIndex(DbModels.U_ID);
-//                int nameInt = c.getColumnIndex(DbModels.NAME);
-//                int imgInt = c.getColumnIndex(DbModels.NOTEIMG);
-//                int timeDateInt = c.getColumnIndex(DbModels.TIMEDATE);
-                String noteID = c.getString(0);
-                String folderID = c.getString(1);
-                String userID = c.getString(2);
-                String noteName = c.getString(3);
-                String noteImg = c.getString(4);
-                String timedate = c.getString(5);
-                List<String> note = Arrays.asList(noteID, folderID, userID, noteName, noteImg, timedate);
-                c.close();
-
-                return note; // returns string in collunm order can change and make class/object if needed
-
-        }
-
-        @Override // stops tables being created again if already exist (user already has app installed)
+        // stops tables being created again if already exist (user already has app installed)
+        @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
                 db.execSQL("DROP TABLE IF EXISTS " + "USERS");
                 db.execSQL("DROP TABLE IF EXISTS " + "FOLDERS");
@@ -437,11 +370,5 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.execSQL("DROP TABLE IF EXISTS " + "NOTIFICATIONS");
                 onCreate(db);
         }
-
-        // to do
-        ///// link folder/user
-        ///// update????????
-        ///// searching
-        ///// delete alter
 
 }
