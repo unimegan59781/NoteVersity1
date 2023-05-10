@@ -1,14 +1,15 @@
 package com.example.noteversity;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -16,69 +17,83 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.button.MaterialButton;
+
 
 public class Login extends AppCompatActivity {
 
-    GoogleSignInOptions gso;
-    GoogleSignInClient gsc;
-    ImageView googleBtn;
+    private static final int RC_SIGN_IN = 1;
+    private GoogleSignInClient mGoogleSignInClient;
+
+    private DbHandler dbHandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        googleBtn = findViewById(R.id.google_btn);
+        dbHandler = new DbHandler(Login.this);
 
-        // Configure Google Sign-In
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        gsc = GoogleSignIn.getClient(this,gso);
+        // Configure sign-in to request the user's ID, email address, and basic profile
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
 
-        // Checking if the user is already signed in
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if(acct!=null){
-            navigateToSecondActivity();
-        }
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // Set click listener on Google sign-in button
-        googleBtn.setOnClickListener(new View.OnClickListener() {
+        ImageView signInButton = findViewById(R.id.google_btn);
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                signIn();
+            public void onClick(View view) {
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
-
-
     }
 
-    // Initiate sign-in process
-    void signIn(){
-        Intent signInIntent = gsc.getSignInIntent();
-        startActivityForResult(signInIntent,  1000);
+    public void userLogin(String name, String email){
+        String user = dbHandler.searchEmail(email);
+        if (user == null){
+            dbHandler.insertUser(email, name, "password");
+            user = dbHandler.searchEmail(email);
+        }
+        Intent intent = new Intent(Login.this, Folders.class);
+        int uID = Integer.parseInt(user);
+        //intent.putExtra("userID", uID);// key is used to get value in Second Activiy
+        startActivity(intent);
     }
 
-    // this handles the result of the sign-in process
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1000){
-            Task<GoogleSignInAccount> signInTask = GoogleSignIn.getSignedInAccountFromIntent(data);
 
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                GoogleSignInAccount account = signInTask.getResult(ApiException.class);
-                if(account != null){
-                    navigateToSecondActivity();
-                }
+                // Google Sign In was successful, get user information
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                String name = account.getDisplayName();
+                String email = account.getEmail();
+                Toast.makeText(getApplicationContext(),"Login", Toast.LENGTH_LONG).show();
+
+                userLogin(name, email);
+
+                // Save user information to shared preferences or database
             } catch (ApiException e) {
-                Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                // Google Sign In failed, update UI appropriately
+                Log.w(TAG, "Google sign in failed", e);
+                Toast.makeText(getApplicationContext(),"fail", Toast.LENGTH_LONG).show();
+                // ...
             }
         }
     }
 
-    // Navigate to the second activity
-    void navigateToSecondActivity() {
-        Intent intent = new Intent(Login.this, SecondLoginActivity.class);
-        startActivity(intent);
-    }
+
+
+
 }
+
