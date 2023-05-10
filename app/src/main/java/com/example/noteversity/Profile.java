@@ -107,6 +107,7 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
         navBarController();
+
         AppCompatButton changeButton = findViewById(R.id.changeUsername);
         changeButton.setOnClickListener(view -> showDialog());
 

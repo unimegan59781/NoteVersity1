@@ -32,6 +32,23 @@ public class DbHandler extends SQLiteOpenHelper {
                 db.execSQL(DbModels.CREATENOTIFICATIONS);
         }
 
+        public void insertUFlink(int uID, int fID) {
+
+                ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
+
+                contentValue.put(DbModels.F_ID, fID);
+                contentValue.put(DbModels.U_ID, uID);
+
+                db.insert(DbModels.tableList.get(3), null, contentValue); // null for filling the id
+        }
+
+        public void deleteUFlink(int ufID){
+                db.delete(DbModels.tableList.get(2), DbModels.NAME + "=?", null);
+        }
+
+
+
+
         public void insertUser(String email, String username, String password) {
 
                 ContentValues contentValue = new ContentValues(); // ContentValues class to insert collumns into table
@@ -42,6 +59,7 @@ public class DbHandler extends SQLiteOpenHelper {
 
                 db.insert(DbModels.tableList.get(0), null, contentValue); // null for filling the id
         }
+
 
         public void insertFolder(int userID, String folderName) {
 
@@ -68,6 +86,48 @@ public class DbHandler extends SQLiteOpenHelper {
                 c.close();
 
                 return folder; // returns string in collunm order can change and make class/object if needed
+        }
+
+        public List<String> getUsersFolders(int uID){
+                List<String> allFolders = new ArrayList<>();
+                c =  db.rawQuery("SELECT * FROM " + DbModels.tableList.get(3) + " WHERE " + DbModels.U_ID + "=" + uID, null);
+                if (c != null && c.moveToFirst()) {
+                        do {
+                                String folderID = c.getString(1);
+                                allFolders.add(folderID);
+                        } while (c.moveToNext());
+                }
+                c.close();
+                return allFolders;
+        }
+
+        public List<String> getUsersInFolder(int fID){
+                List<String> allUsers = new ArrayList<>();
+                c =  db.rawQuery("SELECT * FROM " + DbModels.tableList.get(3) + " WHERE " + DbModels.F_ID + "=" + fID, null);
+                if (c != null && c.moveToFirst()) {
+                        do {
+                                String userID = c.getString(2);
+                                allUsers.add(userID);
+                        } while (c.moveToNext());
+                }
+                c.close();
+                return allUsers;
+        }
+
+        public String getFolderName(int fID){
+                c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(1) + " WHERE " + DbModels.F_ID + "=" + fID, null);
+
+                if (c.getCount() == 0) {
+                        c.close();
+                        return null;
+                }
+
+                c.moveToFirst();
+
+                String name = c.getString(2);
+                c.close();
+
+                return name;
         }
 
         public void deleteFolder(String folderName){
@@ -129,6 +189,22 @@ public class DbHandler extends SQLiteOpenHelper {
                 return userID;
         }
 
+        public String searchEmail(String email) {
+                // gets folder with given id from raw query
+                c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.EMAIL + "=?", new String[]{email});
+
+                // Check if cursor has any rows
+                if (c.getCount() == 0) {
+                        c.close();
+                        return null;
+                }
+
+                c.moveToFirst();
+                String userID = c.getString(0);
+                c.close();
+                return userID;
+        }
+
         public String searchNote(String name){ // gets folder with given id from raw query
                 c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.NAME + "=?", new String[]{name});
                 c.moveToFirst();
@@ -161,10 +237,26 @@ public class DbHandler extends SQLiteOpenHelper {
                 String email = c.getString(1);
                 String username = c.getString(2);
                 String password = c.getString(3);
-                List<String> folder = Arrays.asList(userID, email, username, password);
+                List<String> user = Arrays.asList(userID, email, username, password);
                 c.close();
 
-                return folder; // returns string in collunm order can change and make class/object if needed
+                return user; // returns string in collunm order can change and make class/object if needed
+        }
+
+        public String getUserName(int uID) {
+                c = db.rawQuery("SELECT * FROM " + DbModels.tableList.get(0) + " WHERE " + DbModels.U_ID + "=" + uID, null);
+
+                if (c.getCount() == 0) {
+                        c.close();
+                        return null;
+                }
+
+                c.moveToFirst();
+
+                String name = c.getString(1);
+                c.close();
+
+                return name;
         }
 
         public List<String> getAllFolders(int uID){ // gets folder with given id from raw query
@@ -181,10 +273,6 @@ public class DbHandler extends SQLiteOpenHelper {
                 if (c == null) {
                         return null;
                 }
-//                String folderID = c.getString(0);
-//                String userID = c.getString(1);
-//                String timedate = c.getString(3);
-//                List<String> folder = Arrays.asList(folderID, userID, folderName, timedate);
                 c.close();
 
                 return allFolders; // returns string in collunm order can change and make class/object if needed
