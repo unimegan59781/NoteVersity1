@@ -164,10 +164,9 @@ public class Folders extends AppCompatActivity {
                     newFolder.setText(newName);
 
                     List<String> folderList = dbHandler.getFolder(folderName);
-                    int folderID = 2; //Integer.parseInt(folderList.get(0));
+                    int folderID = Integer.parseInt(folderList.get(0));
 
-                    //Log.d("Folder page", String.valueOf(folderID));
-                    //dbHandler.changeFoldername(name, folderID);
+                    dbHandler.changeFoldername(newName, folderID);
 
                     return super.onDoubleTap(e); // passes event as super to overide touch
                 }
