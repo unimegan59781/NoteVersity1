@@ -29,29 +29,17 @@ import java.util.List;
 
 public class Folders extends AppCompatActivity {
     private DbHandler dbHandler; // imports db handler
-    
-  public int userID;
-    
-    //Shorthand function for getApplicationContext()
+
+    public int userID; // sets userID that can be get from previous
+
     public android.content.Context cntx() {
         return getApplicationContext();
     }
 
-    //Gets current screen pixel density, and uses it to convert dependent pixel values into pixels to be used within the layout
     public static int DPtoPixels(android.content.Context context, int dp) {
         float scale = context.getResources().getDisplayMetrics().density;
         int pixels = (int) (dp * scale + 0.5f);
         return pixels;
-    }
-
-    public String nameFolder() { // function to name folder + name validation //REUSE NOTES
-        EditText name = (EditText) findViewById(R.id.folderNameEdit);
-        String title = name.getText().toString();
-
-        int valid = 0;
-
-        name.setText("");
-        return title;
     }
 
     public boolean nameCheck(String title){
@@ -71,7 +59,6 @@ public class Folders extends AppCompatActivity {
     }
 
 
-    //Creates a folder using gridLayout, sets the appropriate margin and paddings, and returns it to be added to the screen.
     public AppCompatButton createFolder(String folderName) {
         AppCompatButton newFolder = new AppCompatButton(this);
         GridLayout.LayoutParams params = new GridLayout.LayoutParams(GridLayout.spec(
@@ -163,13 +150,23 @@ public class Folders extends AppCompatActivity {
 
                 @Override // double tap to edit name
                 public boolean onDoubleTap(MotionEvent e) {
+                    //folderView.setBackgroundColor(Color.YELLOW);
 
-                    String name = nameFolder();
-                    newFolder.setText(name);
+                    String newName = "change";
+                    EditText name = (EditText) findViewById(R.id.folderNameEdit);
+                    String title = name.getText().toString();
+                    if (nameCheck(title)){
+                        newName = title;
+                        name.setText("");
+                    } else {
+                        newName = folderName;
+                    }
+                    newFolder.setText(newName);
 
                     List<String> folderList = dbHandler.getFolder(folderName);
                     int folderID = Integer.parseInt(folderList.get(0));
-                    dbHandler.changeFoldername(name, folderID);
+
+                    dbHandler.changeFoldername(newName, folderID);
 
                     return super.onDoubleTap(e); // passes event as super to overide touch
                 }
