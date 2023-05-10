@@ -20,8 +20,9 @@ import java.util.List;
 
 public class SearchUser extends AppCompatActivity {
 
-    private DbHandler dbHandler;
+    private DbHandler dbHandler; // links dbHandler
 
+    // displays all users on page and links buttons when intally uploaded
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +36,7 @@ public class SearchUser extends AppCompatActivity {
         int folderID = getIntent().getIntExtra("folderID", 0);
         int userID = getIntent().getIntExtra("userID", 0);
 
+        // adds all userss into display view
         List<String> usersIDs = dbHandler.getUsersInFolder(folderID);
         String username = "";
         if (usersIDs != null) {
@@ -45,8 +47,9 @@ public class SearchUser extends AppCompatActivity {
         }
 
         TextView displayView = findViewById(R.id.displayUsers);
+        displayView.setText(username);
 
-
+        // lets user go back to notes page
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +57,7 @@ public class SearchUser extends AppCompatActivity {
             }
         });
 
+        // saerch button links database and allows user to add new user from username typed in edit text
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +76,7 @@ public class SearchUser extends AppCompatActivity {
                 intent.putExtra("userID", userID);
                 startActivity(intent);
 
+                // success message to say user added
                 Toast.makeText(getApplicationContext(),"User folder request sent", Toast.LENGTH_LONG).show();
 
             }});

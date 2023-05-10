@@ -40,19 +40,19 @@ public class NoteCreation extends AppCompatActivity {
         int folderID = intent.getIntExtra("folderID", 0);
         int userID = intent.getIntExtra("userID", 0);
 
-
-        Draw note = new Draw(this); // creates new isntace of draw class so user can create note
-
-        dbHandler = new DbHandler(NoteCreation.this); // here // links db handler to class and with variable dbHandler to call later
+        // creates new instance of draw class so user can create note
+        Draw note = new Draw(this);
+        // Links db handler to class and with variable dbHandler to call later
+        dbHandler = new DbHandler(NoteCreation.this);
 
         EditText titleName = findViewById(R.id.noteTitle);
         String title = titleName.getText().toString();
-
-        ImageButton saveBut = (ImageButton) findViewById(R.id.newNoteBtn); // save button link
+        // Save button link
+        ImageButton saveBut = (ImageButton) findViewById(R.id.newNoteBtn);
         Button changeButton = findViewById(R.id.backgroundButton);
-
-        RelativeLayout noteView = (RelativeLayout) findViewById(R.id.content); // create view that draw can be implemented on
-         // links draw class for user to write on screen and see buttons
+        // Create view that draw can be implemented on
+        RelativeLayout noteView = (RelativeLayout) findViewById(R.id.content);
+        // Links draw class for user to write on screen and see buttons
         if (oldNote) {
             byte[] byteIMG = Base64.decode(dbIMG, Base64.DEFAULT);
 
@@ -69,6 +69,7 @@ public class NoteCreation extends AppCompatActivity {
             changeButton.setVisibility(View.VISIBLE);
         }
 
+        // When the button is clicked, this cycles through a list of different background images
         changeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,24 +89,25 @@ public class NoteCreation extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                // Retrieves the title entered by the user
                 EditText titleName = findViewById(R.id.noteTitle);
                 String title = titleName.getText().toString();
+                // Checks if the note title is valid
                 if (checkNoteTitle(title)){
                     titleName.setText("");
                 } else {
                     return;
                 }
 
-                // TO DO CHECK ERROR
 
                 byte[] byteIMG = saveScreen(noteView); // get byte array of view
                 String byteStingIMG = Base64.encodeToString(byteIMG, Base64.DEFAULT); // set to string to save in db
-
+                // Cleans notes and inserts into db
                 note.clean();
-                dbHandler.insertNotes(userID, folderID, title, byteStingIMG); //inserts into db // here
+                dbHandler.insertNotes(userID, folderID, title, byteStingIMG);
 
                 Intent intent = new Intent(NoteCreation.this, NotesPages.class);
-                intent.putExtra("folderID", folderID);// key is used to get value in Second Activiy
+                intent.putExtra("folderID", folderID);// key is used to get value in Second Activity
                 Log.d("Folder send cteation", String.valueOf(folderID));
                 startActivity(intent);
             }
@@ -113,6 +115,7 @@ public class NoteCreation extends AppCompatActivity {
         });//
     }
 
+    // This method checks the validity of the note title by checking its length and whether it already exists in the database.
     public boolean checkNoteTitle(String title) {
         String nameLookUp = dbHandler.searchNote(title);
         if (title.length() == 0) {
@@ -145,6 +148,5 @@ public class NoteCreation extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length); // turns byte[] to bitmap
         return bitmap;
     }
-    
-    //  Functions that validates the note title fits within 0 - 16 characters
+
 }
