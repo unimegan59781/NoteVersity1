@@ -29,6 +29,9 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class Notifications extends AppCompatActivity {
 
+    private int folderID;
+    private int userID;
+
     public void navBarController(){
         BottomNavigationView bottomBar = findViewById(R.id.bottomBar);
         bottomBar.setSelectedItemId(R.id.notifButton);
@@ -67,6 +70,7 @@ public class Notifications extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = new Intent();
+        int folderID = intent.getIntExtra("folderID", 0);
         int userID = intent.getIntExtra("userID", 0);
 
         setContentView(R.layout.notifications);
@@ -115,7 +119,7 @@ public class Notifications extends AppCompatActivity {
         }
     }
 
-    public void openDialog(List<String> noti, AppCompatButton notiBut) {
+    public void openDialog(List<String> noti) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Folder Invitation:")
                 // Below will be a premade message fetched from the get Notifications
@@ -123,9 +127,9 @@ public class Notifications extends AppCompatActivity {
                 .setNegativeButton("Decline", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which){
-                        // Message (Maybe not)
                         dbHandler.deleteNotification(Integer.parseInt(noti.get(0)));
-                        findViewById(R.id.grid).setVisibility(View.INVISIBLE);
+                        String ufID = dbHandler.getUFLink(folderID, userID);
+                        dbHandler.deleteUFlink(Integer.parseInt(ufID));
 
                     }
                 })
@@ -176,7 +180,7 @@ public class Notifications extends AppCompatActivity {
             notiButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    openDialog(stringNotis.get(notiButton.getId()), notiButton);
+                    openDialog(stringNotis.get(notiButton.getId()));
                 }
             });
             table.addView(notiButton);
