@@ -6,27 +6,28 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.GridLayout;
 import android.widget.RadioButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.List;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class Notifications extends AppCompatActivity {
-
-    public ArrayList<String> UserIDs = new ArrayList<String>();
-        public ArrayList<Notification> Notis = new ArrayList<Notification>();
-        private Button openButton;
-
 
     public void navBarController(){
         BottomNavigationView bottomBar = findViewById(R.id.bottomBar);
@@ -52,190 +53,134 @@ public class Notifications extends AppCompatActivity {
             }
         });
     }
+
+    private DbHandler dbHandler; // imports db handler //// here
+    public ArrayList<Notification> Notis = new ArrayList<Notification>();
+    //public List<List<String>> stringNotis;
+    public List<List<String>> stringNotis;
+    public ArrayList<Notification> fetchedNotis = new ArrayList<Notification>();
+
+    private Button openButton;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.notifications);
-        navBarController();
-        UserIDs.add("Henry");
-        UserIDs.add("Josh");
-        UserIDs.add("Fred Harper Morgan Christie-Cooper");
-        UserIDs.add("Chris");
-        UserIDs.add("Jack");
-        Notis.add(new Notification(1,"Folder 1",2,3,1,true));
-        Notis.add(new Notification(2,"Folder 1",2,4,1));
-        Notis.add(new Notification(3,"Folder 3",4,3,3,true));
-        /*openButton = (Button) findViewById(R.id.btnOpen);
-        openButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDialog();
-            }
-        });
 
-         */
+        Intent intent = new Intent();
+        int userID = intent.getIntExtra("userID", 0);
+
+        setContentView(R.layout.notifications);
+        dbHandler = new DbHandler(Notifications.this); // here // links db handler to class and with variable dbHandler to call later
+        navBarController();
+/*
+        dbHandler.deleteNotification(1);
+        dbHandler.deleteNotification(2);
+        dbHandler.deleteNotification(3);
+        dbHandler.deleteNotification(4);
+        dbHandler.deleteNotification(5);
+        dbHandler.deleteNotification(6);
+        dbHandler.deleteNotification(7);
+
+
+
+        Notis.add(new Notification(1,2,3,1));
+        Notis.add(new Notification(3,4,3,3));
+        Notis.add(new Notification(2,2,6,7));
+
+         for (int i = 0; i < 3; i++){
+            dbHandler.insertNotification(Notis.get(i).senderID,Notis.get(i).recipientID,Notis.get(i).folderID);
+        }
+
+
+*/
+        dbHandler.insertNotification(2,1,1);
+
+
+        stringNotis = dbHandler.getNotifications(1);
+
+        addNotiRows();
+
     }
 
     public class Notification {
         public int notiID;
-        public String folderName;
         public int folderID;
-        public int senderID;
         public int recipientID;
-        public Boolean invite;
-        public Notification(int notiID,String folderN,int senderID,int recipientID,int folderID,Boolean invite){
-           this.notiID = notiID;
-           this.senderID = senderID;
-           this.recipientID = recipientID;
-           this.folderID = folderID;
-           this.folderName = folderN;
-           if (invite==null){invite=false;}
-            else this.invite = invite;
-        }
-
-        public Notification(int notiID,String folderN,int senderID,int recipientID,int folderID){
+        public String message;
+        public Notification(int notiID,int senderID,int recipientID,int folderID,String message) {
             this.notiID = notiID;
-            this.senderID = senderID;
             this.recipientID = recipientID;
             this.folderID = folderID;
-            this.folderName = folderN;
-            this.invite = false;
+            this.message = message;
         }
     }
 
-    public void open(View view) {
-        TableLayout table = findViewById(R.id.tableLayout);
-        ArrayList<Integer> checked = new ArrayList<Integer>();
-        for (int i=0;i<table.getChildCount()-1;i++) {
-            CheckBox checkBox = findViewById(i);
-            if (checkBox.isChecked() == true) {
-                checked.add(i);
-            }
-        }
-        if (checked.size()!=1){}
-            else openDialog(view,Notis.get(checked.get(0)));
-
-
-        /*
-        if number of notifications selected > 1 then
-            print "No more than 1
-        else
-        invitation = table.getView(index of selected notification
-
-        Pop up menu
-        "invitation.SenderID.name has shared folder name with you. Do you wish to accept the invitation?
-            Accept           Decline
-                "Are you sure you want to accept/decline?"
-
-         */
-    }
-
-    public void openDialog(View view,Notification noti) {
-        TextView text = findViewById(R.id.textNotiCount);
+    public void openDialog(List<String> noti, AppCompatButton notiBut) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Folder Invitation:")
-                .setMessage(String.valueOf(noti.senderID)+" has shared "+noti.folderName+" with you,\nDo you want to accept the invitation?")
+                // Below will be a premade message fetched from the get Notifications
+                //.setMessage(String.valueOf(noti.senderID)+" has shared Folder "+noti.folderID+" with you,\nDo you want to accept the invitation?")
                 .setNegativeButton("Decline", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which){
-                        text.setText("Declined!!");
+                        // Message (Maybe not)
+                        dbHandler.deleteNotification(Integer.parseInt(noti.get(0)));
+                        findViewById(R.id.grid).setVisibility(View.INVISIBLE);
+
                     }
                 })
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which){
-                        text.setText("Accepted!");
+                        //dbHandler.deleteUFlink(fID);
+                        findViewById(R.id.grid).setVisibility(View.INVISIBLE);
                     }
                 });
         builder.show();
     }
-
-    /*
-            Sample TableRows
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <CheckBox
-                    android:id="@+id/checkBoxRow1"
-                    style="@style/Widget.Material3.CompoundButton.CheckBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:drawable="@color/material_dynamic_neutral_variant30" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Henry"
-                    android:textColor="@color/white" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <CheckBox
-                    android:id="@+id/checkBoxRow2"
-                    style="@android:style/Widget.CompoundButton.CheckBox"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:shadowColor="@color/white" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Jack"
-                    android:textColor="@color/white" />
-
-            </TableRow>
-     */
-
-    public void addNameRows(View view){
-        TableLayout table = (TableLayout) findViewById(R.id.tableLayout);
-        for (int i = 0; i < Notis.size(); i++) {
-            TextView text = new TextView(this);
-            String message = String.valueOf(Notis.get(i).senderID)+" has shared folder '"+Notis.get(i).folderName+"' with you.";
-            text.setText(message);
-            TextView textInvite = new TextView(this);
-            if (Notis.get(i).invite==true){textInvite.setText("Invite");}
-                else textInvite.setText("Folder update");
-            text.setTextColor(Color.WHITE);
-            textInvite.setTextColor(Color.WHITE);
-            text.setTextSize(14);
-            textInvite.setTextSize(14);
-            TableRow newRow = new TableRow(this);
-            CheckBox checkBox = new CheckBox(this);
-            checkBox.setId(i);
-            newRow.addView(checkBox);
-            newRow.addView(text);
-            newRow.addView(textInvite);
-            table.addView(newRow, table.getChildCount() - 1);
-        /*
-        TableLayout table = (TableLayout) findViewById(R.id.tableLayout);
-        for (int i = 0; i < UserIDs.size(); i++) {
-            TextView text = new TextView(this);
-            text.setText(UserIDs.get(i));
-            text.setTextColor(Color.WHITE);
-            text.setTextSize(14);
-            TableRow newRow = new TableRow(this);
-            CheckBox checkBox = new CheckBox(this);
-            newRow.addView(checkBox);
-            newRow.addView(text);
-            table.addView(newRow, table.getChildCount() - 1);
-            */
-        }
+    public android.content.Context cntx() {
+        return getApplicationContext();
     }
 
-    public void addTableRow(View view){
-        TableLayout table = (TableLayout) findViewById(R.id.tableLayout);
-        table.removeViewAt(3);
-        navBarController();
+    public static int DPtoPixels(android.content.Context context, int dp) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        int pixels = (int) (dp * scale + 0.5f);
+        return pixels;
+    }
+
+    public AppCompatButton createNotiButton(String notiMessage){
+        AppCompatButton newNoti = new AppCompatButton(this);
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams(GridLayout.spec(
+                GridLayout.UNDEFINED,GridLayout.FILL,1f),
+                GridLayout.spec(GridLayout.UNDEFINED,GridLayout.FILL,1f));
+
+
+        params.setMargins(DPtoPixels(cntx(),3),DPtoPixels(cntx(),3),DPtoPixels(cntx(),3),DPtoPixels(cntx(),6));
+        newNoti.setLayoutParams(params);
+        newNoti.setBackgroundResource(R.drawable.folder_view);
+        newNoti.setText(notiMessage); // use will name function
+        newNoti.setGravity(Gravity.START);
+        newNoti.setGravity(Gravity.CENTER_VERTICAL);
+        newNoti.setPadding(DPtoPixels(getApplicationContext(),15),0,0,0);
+        return newNoti;
+
+    }
+
+    public void addNotiRows(){
+        GridLayout table = findViewById(R.id.grid);
+        for (int i = 0; i < stringNotis.size(); i++) {
+            String message = stringNotis.get(i).get(4);
+            TableRow newRow = new TableRow(this);
+            AppCompatButton notiButton = createNotiButton(message);
+            notiButton.setId(i);
+            notiButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    openDialog(stringNotis.get(notiButton.getId()), notiButton);
+                }
+            });
+            table.addView(notiButton);
+        }
     }
 
 }

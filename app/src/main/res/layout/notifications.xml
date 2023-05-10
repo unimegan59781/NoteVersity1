@@ -2,120 +2,27 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="visible"
-    android:background="@drawable/loginbackground"
-    tools:context=".Notifications"
-    tools:visibility="visible">
-
-    <TextView
-        android:id="@+id/textTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="130dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="Notifications"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textNotiCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:layout_marginEnd="15dp"
-        android:text="0 Notifications Unread:"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textSelectedCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="70dp"
-        android:text="0 Selected"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btnClearSelected"
-        android:layout_width="115dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="100dp"
-        android:background="@drawable/rounded_button"
-        android:onClick="addTableRow"
-        android:text="Clear Selected"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btnMarkUnread"
-        android:layout_width="115dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="20dp"
-        android:background="@drawable/rounded_button"
-        android:text="Mark Un/Read"
-        android:onClick="addNameRows"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/btnClearSelected"
-        app:layout_constraintTop_toTopOf="@+id/btnClearSelected" />
-
-    <Button
-        android:id="@+id/btnOpen"
-        android:layout_width="115dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="20dp"
-        android:background="@drawable/rounded_button"
-        android:text="Open"
-        android:onClick="open"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/btnMarkUnread"
-        app:layout_constraintTop_toTopOf="@+id/btnMarkUnread" />
+    android:orientation="vertical"
+    tools:context=".Folders">
 
     <ScrollView
-        android:layout_width="370dp"
-        android:layout_height="490dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnClearSelected">
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="60dp">
 
-        <TableLayout
-            android:id="@+id/tableLayout"
+
+        <GridLayout
+            android:id="@+id/grid"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="12dp"
-            android:stretchColumns="1,2,3">
-
-
-            <TableRow
-                android:id="@+id/rowBuffer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/bufferTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="130dp" />
-
-            </TableRow>
-
-        </TableLayout>
+            android:layout_height="wrap_content"
+            android:columnCount="1"
+            android:rowCount="2"/>
     </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -125,5 +32,7 @@
         android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
