@@ -29,13 +29,15 @@ import java.util.List;
 
 public class Folders extends AppCompatActivity {
     private DbHandler dbHandler; // imports db handler
-
-    public int userID;
-
+    
+  public int userID;
+    
+    //Shorthand function for getApplicationContext()
     public android.content.Context cntx() {
         return getApplicationContext();
     }
 
+    //Gets current screen pixel density, and uses it to convert dependent pixel values into pixels to be used within the layout
     public static int DPtoPixels(android.content.Context context, int dp) {
         float scale = context.getResources().getDisplayMetrics().density;
         int pixels = (int) (dp * scale + 0.5f);
@@ -69,6 +71,7 @@ public class Folders extends AppCompatActivity {
     }
 
 
+    //Creates a folder using gridLayout, sets the appropriate margin and paddings, and returns it to be added to the screen.
     public AppCompatButton createFolder(String folderName) {
         AppCompatButton newFolder = new AppCompatButton(this);
         GridLayout.LayoutParams params = new GridLayout.LayoutParams(GridLayout.spec(
