@@ -309,6 +309,14 @@ public class DbHandler extends SQLiteOpenHelper {
                 return noteImg; // returns string in collunm order can change and make class/object if needed
         }
 
+        public void changeUserName(String username, int uID){
+                String sql = "UPDATE USERS SET username = " + "'"+username+"' " + "WHERE userID = " + uID;
+                System.out.println(sql);
+                db.execSQL(sql);
+
+
+        }
+
         public List<String> getNote(int nID){ // gets note with given note id from raw query
                 c =  db.rawQuery( "SELECT * FROM " + DbModels.tableList.get(2) + " WHERE " + DbModels.N_ID + "=" + nID + "", null );
                 c.moveToFirst();
