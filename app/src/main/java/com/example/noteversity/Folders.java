@@ -42,7 +42,7 @@ public class Folders extends AppCompatActivity {
         return pixels;
     }
 
-    //
+    // checks validates name sends error popup toast message
     public boolean nameCheck(String title){
         String nameLookUp = dbHandler.searchFolder(title);
         if (title.length() == 0) {
@@ -60,6 +60,7 @@ public class Folders extends AppCompatActivity {
     }
 
 
+    // + button at bottom right that creates usbale button in grid view to create visual aid of a folder for user that crud can be applied to
     public AppCompatButton createFolder(String folderName) {
         AppCompatButton newFolder = new AppCompatButton(this);
         GridLayout.LayoutParams params = new GridLayout.LayoutParams(GridLayout.spec(
@@ -79,6 +80,7 @@ public class Folders extends AppCompatActivity {
     }
 
 
+    // adds new folder to view and to database - name check
     @SuppressLint("ClickableViewAccessibility")
     public void folderAdd(android.view.View view) {
         GridLayout folder = (GridLayout) findViewById(R.id.grid);
@@ -101,6 +103,7 @@ public class Folders extends AppCompatActivity {
 
     }
 
+    // gets folder from grid view folder searching using the naem of the folder
     public View getFolder(String folderName, GridLayout folder) { // function that loops the views in folder grid layout to find location of view with desired name
         for (int i = 0; i < folder.getChildCount(); i++) {
             View folderLocation = folder.getChildAt(i);
@@ -114,14 +117,13 @@ public class Folders extends AppCompatActivity {
         return null; // folder doesn't exist (error checker - shouldn't occcur)
     }
 
+    // deletes folder visually in grid and on db
     public void deleteFolder(View folderName, GridLayout folder, String name) { // delete folder from view
         folder.removeView(folderName); // removes view in grid layout folder with view thats be named
         dbHandler.deleteFolder(name);
-        // TO ADD DB DELETE CODE
     }
 
-    ;
-
+    // folder intercations to crud the folders in database
     @SuppressLint("ClickableViewAccessibility")
     public void folderInteractions(AppCompatButton newFolder, GridLayout folder) {
         View folderView = getFolder(newFolder.getText().toString(), folder); // uses get function to find view of the folder from grid layout
@@ -129,7 +131,9 @@ public class Folders extends AppCompatActivity {
 
         newFolder.setOnTouchListener(new View.OnTouchListener() {
 
+            // uses gesture detector to get more specific details on user grid intercation than clicking
             private final GestureDetector gestDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
+                // user swipe to left to delete folder
                 @Override
                 public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                     float diffY = e2.getY() - e1.getY();
@@ -145,14 +149,16 @@ public class Folders extends AppCompatActivity {
                     return super.onFling(e1, e2, velocityX, velocityY);
                 }
 
+                // swipe left to link to db delete of folder
                 public void onSwipeLeft() {
                     deleteFolder(folderView, folder, folderName);
                 }
 
+                // double tap to change name of folder
                 @Override // double tap to edit name
                 public boolean onDoubleTap(MotionEvent e) {
 
-                    String newName = "change";
+                    String newName;
                     EditText name = (EditText) findViewById(R.id.folderNameEdit);
                     String title = name.getText().toString();
                     if (nameCheck(title)){
@@ -171,10 +177,9 @@ public class Folders extends AppCompatActivity {
                     return super.onDoubleTap(e); // passes event as super to overide touch
                 }
 
+                // single tap takes user to notes page and loads notes from folder id sent through intent
                 @Override
                 public boolean onSingleTapConfirmed(MotionEvent e) {
-                    //folderView.setBackgroundColor(Color.BLUE);
-                    //startActivity(new Intent(Folders.this, NotesPages.class));
                     List<String> folderList = dbHandler.getFolder(folderName);
                     int folderID = Integer.parseInt(folderList.get(0));
 
@@ -184,12 +189,12 @@ public class Folders extends AppCompatActivity {
                     Log.d("Folder folder page", String.valueOf(folderID));
                     startActivity(intent);
 
-                    // TO GO TO VIEW
                     return super.onSingleTapConfirmed(e);
                 }
 
             });
 
+            // on touch master to known folder interacted with on grid
             public boolean onTouch(View v, MotionEvent event) {
                 gestDetector.onTouchEvent(event);
                 return true;
@@ -197,6 +202,7 @@ public class Folders extends AppCompatActivity {
         });
     }
 
+    // nav bar to go through pages at bottom menu
     public void navBarController() {
         BottomNavigationView bottomBar = findViewById(R.id.bottomBar);
         bottomBar.setSelectedItemId(R.id.homeButton);
@@ -221,6 +227,7 @@ public class Folders extends AppCompatActivity {
         });
     }
 
+    // on create when page loaded gets user intent from previous, and loads all folders from database or none if none
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
