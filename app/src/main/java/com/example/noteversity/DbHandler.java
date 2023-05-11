@@ -219,7 +219,6 @@ public class DbHandler extends SQLiteOpenHelper {
                                 String senderID = c.getString(1);
                                 String recipientID = c.getString(2);
                                 String folderID = c.getString(3);
-                                String timeDate = c.getString(4);
                                 String message = notiMessage(Integer.parseInt(folderID), senderID);
                                 notification = Arrays.asList(nfID, senderID, recipientID, folderID,message);
                                 notificationList.add(notification);
